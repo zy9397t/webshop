@@ -444,13 +444,14 @@ import {mapState} from 'vuex'
       // font-size 10px
       // height 300px
       .ads
-        // height 270px
+        height 270px
+        width 100%
         display flex 
         flex-direction column
         justify-content space-evenly
         img 
           width 100%
-          height 100%
+          height 33%
       .cotegories
         display flex 
         flex-direction column
@@ -461,7 +462,7 @@ import {mapState} from 'vuex'
           li 
             margin-left 5px 
       .swiper
-        // height 300px
+        height 270px
         width 100%
         // height 300px
         img 
