@@ -1,6 +1,6 @@
 //api合集
 
-import instance from './axios'
+// import instance from './axios'
 export function test(){
     let a
     setTimeout(()=>{

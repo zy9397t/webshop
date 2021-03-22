@@ -1,0 +1,54 @@
+<template>
+  <div class="guider">
+      <span @click="direct(0)">首页</span>
+      <span @click="direct(1)">购物车</span>
+      <span @click="direct(2)">个人</span>
+      <span @click="direct(3)">客服</span>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+// import router from
+  export default {
+      methods:{
+        direct(value){
+            /* 0:首页 1:购物车 2:个人中心 3:客服 */
+            if( !Number.isInteger(value) ){
+                return
+            }else{
+                switch(value){
+                    case 0:this.$router.replace('/Msite') ; break
+                    case 1:this.$router.replace('/ShopCar') ; break
+                    case 2:this.$router.replace('/Person') ; break
+                    case 3:this.$router.replace('/Service') ; break
+                    default : break
+                }
+            }
+        }
+      }
+  }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus" scoped>
+.guider
+    width 50px
+    height 200px
+    position fixed
+    top 200px
+    right 10px
+    display flex 
+    flex-direction column
+    justify-content space-evenly
+    // background-color red
+    // border 1px solid red
+    color #fff
+    font-font-weight border 
+    font-size 14px
+    cursor pointer
+    span 
+        background-color green
+        height 24%
+        text-align center
+        line-height 50px
+
+</style>
