@@ -4,7 +4,7 @@
       <el-col :span="24"><div class="grid-content bg-purple">
         <h1>{{position}}</h1>
         <div class="info">
-          <span v-show="!isLogin">你好，请<span class="login cup" @click="redirect('login')">登录</span> <span class="regist cup" @click="redirect('regist')">注册</span></span>
+          <span v-show="!isLogin">你好，请<span class="login cup" @click="redirect('Login')">登录</span> <span class="regist cup" @click="redirect('Regist')">注册</span></span>
           <span class="cup">我的订单</span>
           <span class="cup">我的商店</span>
           <span class="cup">我的会员</span>
@@ -101,6 +101,7 @@
             </div>
           </div></el-col>
       </el-row>
+
       <el-row :gutter="2" class="main2">
         <el-col :span="4" :offset="2"><div class="grid-content bg-purple count_down">
             <div class="cd_title">限时秒杀</div>
@@ -145,16 +146,22 @@
           </div></el-col>
       </el-row>
 
-
+      <ShowShops v-for="(shops,index) in 3" :key="index" :shops="shops"></ShowShops>
     </div>
 
-    
+    <Footer></Footer>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import {mapState} from 'vuex'
+import ShowShops from "components/ShowShops"
+import Footer from "components/Footer"
   export default {
+    components:{
+      ShowShops,
+      Footer
+    },
     mounted(){
       // let date = new Date()
       setInterval(()=>{
@@ -174,11 +181,12 @@ import {mapState} from 'vuex'
     methods:{
       redirect(value){
         console.log(value)
-        switch (value){
-          case 'login' : this.$router.push('/login');break
-          case 'regist' : this.$router.push('/regist');break
-          default : break
-        }
+        // switch (value){
+        //   case 'login' : this.$router.push('/login');break
+        //   case 'regist' : this.$router.push('/regist');break
+        //   default : break
+        // }
+        this.$router.push(value)
       },
       search(){}
     },
@@ -341,7 +349,7 @@ import {mapState} from 'vuex'
   .mainConetent 
     background #D3dce6
     width 100%
-    height 500px
+    // height 500px
     padding-top 10px
     .grid-content 
       background-color #fff
