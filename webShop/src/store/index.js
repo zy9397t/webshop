@@ -6,6 +6,7 @@ import actions from './actions'
 import getters from './getters'
 
 import test from './modules/test'
+import store from './modules/store'
 vue.use(vuex)
 
 export default new vuex.Store({
@@ -13,6 +14,7 @@ export default new vuex.Store({
     actions,
     getters,
     modules:{
-        test
+        test,
+        store
     }
 })

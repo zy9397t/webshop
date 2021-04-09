@@ -6,7 +6,7 @@
         <div class="info">
           <span v-show="!isLogin">你好，请<span class="login cup" @click="redirect('Login')">登录</span> <span class="regist cup" @click="redirect('Regist')">注册</span></span>
           <span class="cup">我的订单</span>
-          <span class="cup">我的商店</span>
+          <span class="cup" @click="getMyStore()">我的商店</span>
           <span class="cup">我的会员</span>
         </div>
       </div></el-col>
@@ -187,6 +187,9 @@ import Footer from "components/Footer"
         //   default : break
         // }
         this.$router.push(value)
+      },
+      getMyStore(){
+        this.$router.push('/myStore')
       },
       search(){}
     },

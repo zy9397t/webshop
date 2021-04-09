@@ -26,7 +26,8 @@ module.exports = {
                 '@':resolve('src'),
                 'components':resolve('src/components'),
                 'api':resolve('src/api'),
-                'pages':resolve('src/pages')
+                'pages':resolve('src/pages'),
+                'utils':resolve('src/utils')
             }
         }
     }

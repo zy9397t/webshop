@@ -1,0 +1,2 @@
+export const REGISTSTORE = 'REGISTSTORE'
+export const GETMYSTORE = 'GETMYSTORE'

@@ -2,6 +2,7 @@ import Msite from 'pages/Msite'
 import Person from 'pages/Person'
 import Service from 'pages/Service'
 import ShopCar from 'pages/ShopCar'
+import MyStore from 'pages/MyStore'
 
 
 import Login from 'pages/Login'
@@ -38,5 +39,12 @@ export default [
     {
         path:'/Regist',
         component:Regist
+    },
+    {
+        path:'/MyStore',
+        component:MyStore,
+        children:[
+          
+        ]
     }
 ]
