@@ -37,7 +37,7 @@ module.exports = function(router) {
         const phoneNum = req.body.phoneNum
         // console.log(phoneNum)
         storeModel.findOne({owner:phoneNum},(error,store)=>{
-            console.log(store)
+            // console.log(store)
             if(!error && store){
                 res.send({code:0,data:{
                     name:store.name,
