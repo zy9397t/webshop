@@ -3,7 +3,8 @@ const cors = require('cors')
 const mongoose = require('mongoose');
 const session = require('express-session')
 
-const userModel = require('./model/userModel')
+// const userModel = require('./model/userModel')
+// const idModel = require('./model/idModel')
 const routers = require('./routers');
 
 
@@ -57,6 +58,7 @@ app.use('/',routers)
                 // .catch(error => {
                 //     console.log('数据插入失败')
                 // })
+
                 console.log('服务器在4000端口启动成功')
             }
         })

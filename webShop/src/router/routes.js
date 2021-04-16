@@ -5,6 +5,7 @@ import ShopCar from 'pages/ShopCar'
 import MyStore from 'pages/MyStore'
 
 import ShopDetail from 'pages/ShopDetail'
+// import AllShops from 'pages/AllShops'
 
 
 import Login from 'pages/Login'
@@ -51,6 +52,6 @@ export default [
         component:MyStore,
         children:[
           
-        ]
+        ] 
     }
 ]

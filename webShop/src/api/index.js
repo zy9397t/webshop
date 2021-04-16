@@ -17,7 +17,7 @@ export function registStore(data){
 }
 
 export function getMyStore(data){
-    return instance.post('/getMyStore',data)
+    return instance.post('/loginStore',data)
 }
 
 

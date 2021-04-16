@@ -17,6 +17,8 @@ router.get('/index_category',function(req,res){
     },1000)
 })
 
+
+
 //商家列表
 router.get('/shops',(req,res)=>{
     const data = require('../data/shops.json')

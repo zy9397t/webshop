@@ -29,7 +29,7 @@
           <div class="top">
             <!-- <div class="search"></div> -->
             <div class="search">
-              <input type="text" v-model="keyWords">
+              <input type="text" v-model="searchkeyWords">
               <div @click="search" class="cup">搜索</div>
             </div>
             <div class="keys" >
@@ -173,7 +173,7 @@ import Footer from "components/Footer"
         timeNow:0,
         // msg:'你好，请'
         isLogin:false,
-        keyWords:'',
+        searchkeyWords:'',
         cotegories:[["家电用器"],["手机","运营商","数码"],["电脑","办公"],["家居","家具","家装","厨具"],["男装",'女装','童装','内衣'],["美妆","个护清洁",'宠物'],["男鞋","运动","户外"],["房产","汽车","汽车用品"]]
       }
     },
@@ -190,7 +190,9 @@ import Footer from "components/Footer"
       getMyStore(){
         this.$router.push('/myStore')
       },
-      search(){}
+      search(){
+        this.redirect('/AllShops')
+      }
     },
     computed:{
       hour(){

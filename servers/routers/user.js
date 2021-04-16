@@ -33,23 +33,7 @@ module.exports = function(router) {
         })
     }),
 
-    router.post('/getMyStore',(req,res)=>{
-        const phoneNum = req.body.phoneNum
-        // console.log(phoneNum)
-        storeModel.findOne({owner:phoneNum},(error,store)=>{
-            // console.log(store)
-            if(!error && store){
-                res.send({code:0,data:{
-                    name:store.name,
-                    shops:store.shops
-                }})
-            }else{
-                res.send({code:1,error:"没有店铺"})
-            }
-        })
-        // res.send({code:0})
-    })
-
+    
     
     router.post('/autoLogin',(req,res) =>{
         // console.log(req.headers['authorization'])

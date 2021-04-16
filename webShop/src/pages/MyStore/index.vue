@@ -1,116 +1,293 @@
 <template>
-  <div>
-    <h1>我的店铺</h1>
-    <div class="myStore" v-if="storeName">
-        <div class="showShops">
-            <!-- 这里面是商品展示 商品列表数组为shops(还没做目前是空，这里要有一个商品添加按钮,每个商品后要预留一个删除等操作按钮) -->
-            <span class="addShop" @click="addShop">添加商品</span>
-        </div>
+  <div class="main">
+    <div>
+      <el-row :gutter="0" class="top">
+        <el-col :span="24"
+          ><div class="grid-content bg-purple">
+            <!-- <h1>{{ position }}</h1> -->
+            <div class="info">
+              <span
+                >你好，请<span class="login cup" @click="redirect('Login')"
+                  >登录</span
+                >
+                <span class="regist cup" @click="redirect('Regist')"
+                  >注册</span
+                ></span
+              >
+              <span class="cup">我的订单</span>
+              <span class="cup">我的商店</span>
+              <span class="cup">我的会员</span>
+            </div>
+          </div></el-col
+        >
+
+        <!-- <el-col :span="12"><div class="grid-content bg-purple"></div></el-col> -->
+      </el-row>
     </div>
-    <div class="noStore" v-else>
-      <div class="msg">
+    <div class="head">
+      <div class="title">
+        <span class="name">商店名称</span>
         <div>
-          您还没有商店,去<span class="toRegistStore" @click="isRegist = true">注册店铺</span
+          <el-button type="primary" size="mini" @click="add"
+            >添加商品</el-button
           >
         </div>
       </div>
+      <div></div>
     </div>
-    <!-- 注册店铺页面 -->
-    <div class="registStore" v-show="isRegist">
-        <!-- 遮罩 -->
-      <div class="mask"></div>
-      
-      <div class="content">
-        <h1>给你的店铺取个名字吧：</h1>
-        <input type="text" v-model="shopName" />
-        <span @click="registStore">提交</span>
-        <span @click="isRegist = false">关闭</span>
+    <div class="body">
+      <div class="bodycontainer">
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          stripe
+          :cell-style="{ 'text-align': 'center' }"
+          :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+        >
+          <el-table-column
+            align="center"
+            prop="id"
+            label="序号"
+            type="index"
+            width="200"
+          >
+            <template slot-scope="scope">
+              <span>{{
+                scope.$index + (pagination.current - 1) * pagination.size + 1
+              }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-for="(item, index) in columnData"
+            align="center"
+            :key="index"
+            :label="item.label"
+            :prop="item.prop"
+            :show-overflow-tooltip="true"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="operation"
+            label="操作"
+            width="180"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <el-button
+                size="small"
+                v-if="scope.row.isSystemAdmin != 1"
+                type="text"
+                @click="edit(scope.row.id)"
+                >编辑</el-button
+              >
+              <el-divider
+                v-if="scope.row.isSystemAdmin != 1"
+                direction="vertical"
+              ></el-divider>
+              <el-button
+                size="mini"
+                v-if="scope.row.isSystemAdmin != 1"
+                type="text"
+                title="删除"
+                @click="del(scope.row.id)"
+                >删除
+              </el-button>
+              <el-divider
+                v-if="scope.row.isSystemAdmin != 1"
+                direction="vertical"
+              ></el-divider>
+              <el-button
+                v-if="scope.row.isSystemAdmin != 1"
+                size="small"
+                type="text"
+                @click="resetPwd(scope.row.id)"
+                >重置密码</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-    </div>
-    <!-- 添加商品页面 -->
-    <div class="addShop" v-show="isAddShop">
-        <!-- 遮罩 -->
-        <div class="mask"></div>
-        <div class="content">
-            <!-- 注册商品页面 商品信息要有：【图片、名、描述、旧价格、新价格、】（主要是你那个商品展示页面的所有信息） -->
-            <!-- <input type="text" value="" v-model="">
-            <input type="text" value="" v-model="">
-            <input type="text" value="" v-model="">
-            <input type="text" value="" v-model="">
-            <input type="text" value="" v-model="">
-            <input type="text" value="" v-model=""> -->
-        </div>
-    </div>
-    
 
+      <el-dialog
+        :title="editTitle"
+        v-if="dialogedit"
+        :visible="true"
+        :close-on-click-modal="false"
+        :show-close="false"
+        ><Dialog @close="closeDialogEdit" @val-change="EditChange"></Dialog>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
-<script type="text/ecmascript-6">
-import { mapState } from "vuex";
+<script>
+import Dialog from "./dialog";
+
 export default {
-  mounted() {
-      this.$store.dispatch('GETMYSTORE',{phoneNum:'13996640244'})
+  components: {
+    Dialog,
   },
+
   data() {
     return {
-    //店铺注册页面开关
-      isRegist: false,
-    //注册时商品名称
-      shopName: "",
-    //添加商品页面开关
-      isAddShop:false,
-    //注册时商品信息
-      shop:{}
+      tableData: [],
+      dialogedit: false,
+      editTitle: "",
+      columnData: [
+        { prop: "picture", label: "图片" },
+        { prop: "userName", label: "商品名称" },
+        { prop: "realName", label: "商品价格（新）" },
+        { prop: "deptName", label: "商品价格（旧）" },
+        { prop: "remark", label: "备注" },
+      ],
     };
   },
-  computed: {
-    ...mapState({
-      registStoreResult: (state) => state.store.registStoreResult,
-      storeName: (state) => {{
-              return state.store.myStore.name
-      }},
-      shops:state => state.store.myStore.shops
-    })
-  },
-  methods: {
-    registStore() {
-      let store = {
-        name: this.shopName,
-        owner: "13996640244",
-        shops: [],
-      };
-      this.$store.dispatch("REGISTSTORE", store).then(() => {
-        //   console.log()
-        if (!this.registStoreResult.code) {
-          //   console.log("添加成功");
-          this.$alert("注册成功", "成功", {
-            confirmButtonText: "确定",
-            callback:()=>{
-                this.$store.dispatch('GETMYSTORE',{phoneNum:'13996640244'})
-                .then(()=>{
-                    this.isRegist =false
-                })
-            }
-          });
-        } else {
-          this.$alert(`${this.registStoreResult.error}`, "注册失败", {
-            confirmButtonText: "确定",
-          });
-        }
-      });
-    },
 
-    addShop(){
-        this.$store.dispatch('ADDSHOP',this.shop)
-    }
+  methods: {
+    add() {
+      this.dialogedit = true;
+      this.editTitle = "商品添加";
+    },
+    //关闭弹窗
+    closeDialogEdit() {
+      this.dialogedit = false;
+      setTimeout(() => {
+        this.row_id = "";
+      }, 500);
+    },
+    //发送新增和修改请求
+    EditChange() {},
   },
 };
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-.toRegistStore
-    cursor pointer
-    &:hover
-        color red
+.cup {
+  cursor: pointer;
+}
+
+.el-row {
+  margin-bottom: 0px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.el-col {
+  border-radius: 0px;
+}
+
+.bg-purple-dark {
+  background: #99a9bf;
+}
+
+.bg-purple {
+  background: #d3dce6;
+}
+
+.bg-purple-light {
+  background: #e5e9f2;
+}
+
+.grid-content {
+  // width 100%
+  border-radius: 0px;
+  min-height: 2vh;
+  display: flex;
+  line-height: 20px;
+  justify-content: space-evenly;
+  color: #999;
+  // cursor pointer
+  box-sizing: border-box;
+}
+
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
+
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 18px;
+  opacity: 0.75;
+  line-height: 300px;
+  margin: 0;
+}
+
+.el-carousel__item:nth-child(2n) {
+  // background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+  // background-color: #d3dce6;
+}
+
+.top .grid-content {
+  display: flex;
+
+  h1 {
+    width: 30%;
+  }
+
+  .info {
+    width: 30%;
+    display: flex;
+    justify-content: space-evenly;
+
+    &>span {
+      width: 70px;
+      text-align: center;
+
+      .login:hover {
+        color: red;
+      }
+
+      .regist:hover {
+        color: red;
+      }
+    }
+  }
+}
+</style>
+
+<style scoped>
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.head {
+  height: 10vh;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.title {
+  align-content: center;
+  line-height: 10vh;
+  width: 80vw;
+  justify-content: center;
+  border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.body {
+  width: 100%;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+}
+
+.bodycontainer {
+  width: 80vw;
+  height: 70vh;
+}
 </style>
