@@ -8,7 +8,7 @@
                         <el-container style="height:100%">
                             <el-aside width="200px">广告</el-aside>
                             <el-main class="main">
-                                <ShowCard v-for="(shop,index) in 7" :key="index"></ShowCard>
+                                <ShowCard v-for="(shop,index) in 7" :key="index" ></ShowCard>
                                 <div class="more" @click="showMore">查看更多>></div>
                             </el-main>
                         </el-container>

@@ -1,5 +1,5 @@
 <template>
-  <div class="showcard">
+  <div class="showcard" @click="redirect('/ShopDetail')">
       <img src="./img/Redmi-k30.png" alt="">
       <div class="shopName">红米k-30</div>
       <div class="shopDetails">120hHz流速屏</div>  
@@ -12,6 +12,11 @@
 
 <script type="text/ecmascript-6">
   export default {
+      methods:{
+          redirect(address){
+              this.$router.push(address)
+          }
+      }
   }
 </script>
 

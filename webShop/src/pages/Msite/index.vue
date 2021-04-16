@@ -154,7 +154,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {mapState} from 'vuex'
 import ShowShops from "components/ShowShops"
 import Footer from "components/Footer"
   export default {
@@ -353,7 +352,7 @@ import Footer from "components/Footer"
     background #D3dce6
     width 100%
     // height 500px
-    padding-top 10px
+    padding 10px 0px
     .grid-content 
       background-color #fff
       padding-top 1px

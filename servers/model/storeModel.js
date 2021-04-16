@@ -1,6 +1,7 @@
 const mogoose = require('mongoose')
 
 const Schema = mogoose.Schema
+//商店模型
 
 const storeSchema = new Schema({
     name:{

@@ -16,6 +16,9 @@ const userSchema = new Schema({
     },
     vip:{
         type:Boolean
+    },
+    others:{
+        type:Object
     }
 })
 const userModel = mongoose.model('users',userSchema)

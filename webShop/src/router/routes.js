@@ -4,6 +4,8 @@ import Service from 'pages/Service'
 import ShopCar from 'pages/ShopCar'
 import MyStore from 'pages/MyStore'
 
+import ShopDetail from 'pages/ShopDetail'
+
 
 import Login from 'pages/Login'
 import Regist from 'pages/Regist'
@@ -39,6 +41,10 @@ export default [
     {
         path:'/Regist',
         component:Regist
+    },
+    {
+        path:'/ShopDetail',
+        component:ShopDetail
     },
     {
         path:'/MyStore',
