@@ -63,8 +63,10 @@
             border 1px solid #333
             font-weight 600
             border-radius 5px
+            
             &:hover
                 background-color #333
                 color white
                 cursor pointer
+                transition  all .5s ease 
 </style>

@@ -70,6 +70,8 @@ module.exports = function(router) {
                         console.log("失败",error)
                         res.send({code:1,error:error})
                     })
+                }else{
+                    res.send({code:1,error:'账户已存在'})
                 }
             }else{
                 res.send({code:1,error:err})
