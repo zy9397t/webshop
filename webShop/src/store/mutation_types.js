@@ -1,2 +1,5 @@
 export const REGISTSTORE = 'REGISTSTORE'
 export const GETMYSTORE = 'GETMYSTORE'
+export const STORELOGIN = 'STORELOGIN'
+export const USERLOGIN = 'USERLOGIN'
+export const USERREGIST = 'USERREGIST'

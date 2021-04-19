@@ -11,9 +11,6 @@ const userSchema = new Schema({
     phone:{
         type:String
     },
-    Email:{
-        type:String
-    },
     pwd:{
         type:String
     },
@@ -21,6 +18,9 @@ const userSchema = new Schema({
         type:Boolean
     },
     others:{
+        type:Object
+    },
+    orders:{
         type:Object
     }
 })

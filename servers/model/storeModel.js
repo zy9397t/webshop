@@ -19,6 +19,9 @@ const storeSchema = new Schema({
     },
     shops:{
         type:Array
+    },
+    orders:{
+        type:Object
     }
 })
 

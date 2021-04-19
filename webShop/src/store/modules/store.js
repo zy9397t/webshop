@@ -1,5 +1,5 @@
-import {REGISTSTORE,GETMYSTORE} from '../mutation_types'
-import {registStore,getMyStore} from 'api'
+import {REGISTSTORE,GETMYSTORE,STORELOGIN} from '../mutation_types'
+import {registStore,getMyStore,storeLogin} from 'api'
 export default {
     state:{
         registStoreResult:'',
@@ -21,6 +21,17 @@ export default {
             }else(
                 commit(GETMYSTORE,{})
             )
+        },
+
+        async [STORELOGIN]({commit},data){
+            console.log(data)
+            const restult = await storeLogin(data)
+            if(!restult.code){
+                console.log(restult.data)
+                // commit()
+            }else{
+                console.log(restult.error)
+            }
         }
     },
     mutations:{

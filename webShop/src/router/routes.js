@@ -8,7 +8,7 @@ import ShopDetail from 'pages/ShopDetail'
 // import AllShops from 'pages/AllShops'
 
 
-import Login from 'pages/Login'
+import Login from 'pages/Login1'
 import Regist from 'pages/Regist'
 
 

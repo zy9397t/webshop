@@ -7,6 +7,7 @@ import getters from './getters'
 
 import test from './modules/test'
 import store from './modules/store'
+import user from './modules/user'
 vue.use(vuex)
 
 export default new vuex.Store({
@@ -15,6 +16,7 @@ export default new vuex.Store({
     getters,
     modules:{
         test,
-        store
+        store,
+        user
     }
 })

@@ -20,4 +20,16 @@ export function getMyStore(data){
     return instance.post('/loginStore',data)
 }
 
+export function storeLogin(data){
+    return instance.post('/loginStore',data)
+}
+
+export function userLogin(data){
+    return instance.post('/login_pwd',data)
+}
+
+export function userRegist(data){
+    return instance.post('/registUser',data)
+}
+
 

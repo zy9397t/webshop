@@ -13,9 +13,12 @@ instance.interceptors.request.use(config =>{
 })
 
 instance.interceptors.response.use(response => {
+    if(response.data.code){
+        window.alert(response.data.error)
+    }
     return response.data
 },error => {
-    alert(error.message)
+    window.alert(error.message)
     return new Promise(()=>{})
 })
 
