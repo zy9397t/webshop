@@ -18,7 +18,7 @@ const storeSchema = new Schema({
         type:String
     },
     shops:{
-        type:Array
+        type:String
     },
     orders:{
         type:Object

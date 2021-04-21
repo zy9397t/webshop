@@ -17,6 +17,23 @@ import Guider from 'components/Guider'
     components:{
       // sample,
       Guider
+    },
+    mounted(){
+      window.onbeforeunload = ()=>{
+       
+        window.sessionStorage.setItem('state',JSON.stringify(this.$store.state))
+        
+      }
+      
+      window.onload = ()=>{
+       
+        let state = window.sessionStorage.getItem('state')
+        
+        // this.$store.state = JSON.parse(state)
+        if(state){
+          this.$store.replaceState(JSON.parse(state))
+        }
+      }
     }
   }
 </script>

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {json2Query} from '@/utils'
+import vue from '../main'
 const instance  = axios.create({
     baseURL:'http://localhost:4000',
     timeout:10000
@@ -14,7 +15,8 @@ instance.interceptors.request.use(config =>{
 
 instance.interceptors.response.use(response => {
     if(response.data.code){
-        window.alert(response.data.error)
+        
+        vue.$message.error(response.data.error)
     }
     return response.data
 },error => {

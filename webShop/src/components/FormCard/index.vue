@@ -7,11 +7,18 @@
       <div class="formItem" @click="callback">
           <input type="button" value="提交" class="btn">
       </div>
+
+
+      <div class="toRegist" @click="redirect('/Regist')" v-if="this.$route.path == '/Login' ? true:  false">立即注册-></div>
+      <div class="toRegist" @click="redirect('/Login')" v-else>去登录-></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
+      mounted(){
+        //   console.log(this.$route)
+      },
       props:{
           config:Object,
           callback:Function
@@ -19,6 +26,11 @@
       data(){
           return {
 
+          }
+      },
+      methods:{
+          redirect(address){
+              this.$router.replace(address)
           }
       }
   }
@@ -36,6 +48,17 @@
     align-items center
     background white
     justify-content center
+    position relative
+    .toRegist
+        position absolute
+        right 10px
+        bottom 10px
+        width 15%
+        height 15px
+        line-height 15px
+        cursor pointer
+        &:hover
+            color skyblue
     h1 
         height 50px
         line-height 50px
@@ -58,6 +81,7 @@
             margin-bottom 10px
             &:focus
                 border-bottom 1px solid blue
+                transition all 1s ease
         .btn
             height 30px
             border 1px solid #333

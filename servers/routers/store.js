@@ -1,5 +1,6 @@
 const storeModel = require('../model/storeModel')
 const userModel = require('../model/userModel')
+const {JsonFilter} =  require('../utils') 
 const {
     round,
     random
@@ -8,26 +9,51 @@ module.exports = function (router) {
 
     router.get('/getStores', (req, res) => {
         storeModel.find({}, (error, Stores) => {
-            console.log(error, Stores)
+            // console.log(error, Stores)
+            if(!error){
+                res.send({
+                    code: 0,
+                    data: Stores.map((store)=>{
+                        let obj = {
+                            id:store.id,
+                            name:store.name,
+                            phone:store.owner,
+                            shops:store.shops
+                        }
+                        return obj
+                    })
+                })
+               }else{
+                   res.send({code:0,error})
+               }
         })
-        res.send({
-            code: 0,
-            date: Stores
-        })
+       
     })
 
-    router.post('/addShops', (req, res) => {
+    router.post('/addShop', (req, res) => {
         const {
-            phoneNum
+            id,
+            shops
         } = req.body
-        // storeModel.findOneAndUpdate({owner:phoneNum},{},)
+
         storeModel.findOne({
-            owner: phoneNum
+            id
         }, (error, store) => {
-            console.log(error, store)
-        })
-        res.send({
-            code: 0
+            // console.log(error, store)
+            if(!error && store){
+                
+                storeModel.updateOne({id},{$set:{shops:shops}},(error,result)=>{
+                    if(!error){
+                        // console.log(result)
+                        res.send({code:0,data:''})
+                        
+                    }else{
+                        res.send({code:1,error})
+                    }
+                })
+            }else{
+                res.send({code:1,error})
+            }
         })
     })
 
@@ -45,16 +71,20 @@ module.exports = function (router) {
             owner: phoneNum
         }, (error, store) => {
             // console.log(store)
-            if (!error && store && store.pwd === pwd) {
+            if (!error && store && (store.pwd === pwd)) {
+                // console.log(store.shops),
                 res.send({
                     code: 0,
+                   
                     data: {
+                        id:store.id,
                         name: store.name,
-                        shops: store.shops,
+                        shops: store.shops ,
                         orders:store.orders
                     }
                 })
-            } else {
+            } 
+            else {
                 res.send({
                     code: 1,
                     error: "没有店铺"
@@ -68,7 +98,7 @@ module.exports = function (router) {
         // req.body.storeName
         // const {storeName,phoneNum} = req.body
         const storeName = req.body.name
-        const phoneNum = req.body.phoneNum
+        const phoneNum = req.body.phone
         const pwd = req.body.pwd
         // console.log(req.body)
         // console.log(storeName,phoneNum)
@@ -91,7 +121,7 @@ module.exports = function (router) {
                     pwd: pwd,
                     name: storeName,
                     owner: phoneNum,
-                    shops: [],
+                    shops: '',
                 }
                 storeModel.create(store)
                     .then(result => {

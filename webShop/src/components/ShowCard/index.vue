@@ -1,20 +1,29 @@
 <template>
   <div class="showcard" @click="redirect('/ShopDetail')">
-      <img src="./img/Redmi-k30.png" alt="">
-      <div class="shopName">红米k-30</div>
-      <div class="shopDetails">120hHz流速屏</div>  
+      <img :src='indexImgUrl' alt="">
+      <div class="shopName">{{shop.name}}</div>
+      <div class="shopDetails">{{shop.remark}}</div>  
       <div class="shopPrice">
-            <div class="newPrice">1599元</div>
-            <div class="oldPrice"><strike>2000元</strike></div>
+            <div class="newPrice">{{shop.newshopprice}}元</div>
+            <div class="oldPrice"><strike>{{shop.oldshopprice}}元</strike></div>
       </div>  
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
+      props:[
+          'shop'
+      ],
       methods:{
           redirect(address){
+              this.$store.commit('USERCHOOSE',this.shop)
               this.$router.push(address)
+          }
+      },
+      computed:{
+          indexImgUrl(){
+              return  `http://localhost:4000/public/${this.shop.imgs[0].imgPath}`
           }
       }
   }
@@ -55,4 +64,16 @@
         .oldPrice
             color gray 
             fot-size  10px
+</style>
+
+<style scoped>
+    .showcard:first-child{
+        margin-top: 5px;
+        margin-left: 5px;
+    }
+
+    .showcard+.showcard{
+        margin-left: 5px;
+        margin-top: 5px;
+    }
 </style>

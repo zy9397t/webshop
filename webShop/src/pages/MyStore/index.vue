@@ -6,17 +6,9 @@
           ><div class="grid-content bg-purple">
             <!-- <h1>{{ position }}</h1> -->
             <div class="info">
-              <span
-                >你好，请<span class="login cup" @click="redirect('Login')"
-                  >登录</span
-                >
-                <span class="regist cup" @click="redirect('Regist')"
-                  >注册</span
-                ></span
-              >
-              <span class="cup">我的订单</span>
-              <span class="cup">我的商店</span>
-              <span class="cup">我的会员</span>
+              <span>你好，{{ myStore.name }}
+                <span class="logout cup" @click="logout">退出登录</span>
+              </span>
             </div>
           </div></el-col
         >
@@ -26,11 +18,12 @@
     </div>
     <div class="head">
       <div class="title">
-        <span class="name">商店名称</span>
+        <span class="name">商店列表</span>
         <div>
           <el-button type="primary" size="mini" @click="add"
             >添加商品</el-button
           >
+          <el-button type="" size="mini" @click="addShops">上传</el-button>
         </div>
       </div>
       <div></div>
@@ -38,13 +31,13 @@
     <div class="body">
       <div class="bodycontainer">
         <el-table
-          :data="tableData"
+          :data="myStore.shops"
           style="width: 100%"
           stripe
           :cell-style="{ 'text-align': 'center' }"
           :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
         >
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             prop="id"
             label="序号"
@@ -55,6 +48,16 @@
               <span>{{
                 scope.$index + (pagination.current - 1) * pagination.size + 1
               }}</span>
+            </template>
+          </el-table-column> -->
+          <el-table-column prop="imgurel" label="商品图片" align="center">
+            <!-- <img :src="shop.shopPics[0].base64URL" alt="" v-show="shop.imgurl"> -->
+            <template slot-scope="scope">
+              <img 
+                :src="scope.row.imgurel ? 'http://localhost:4000/public/'+scope.row.imgurel : ''"
+                alt=""
+                style="width: 100px; height: 100px"
+              />
             </template>
           </el-table-column>
           <el-table-column
@@ -77,7 +80,7 @@
                 size="small"
                 v-if="scope.row.isSystemAdmin != 1"
                 type="text"
-                @click="edit(scope.row.id)"
+                @click="edit(scope.$index)"
                 >编辑</el-button
               >
               <el-divider
@@ -89,20 +92,20 @@
                 v-if="scope.row.isSystemAdmin != 1"
                 type="text"
                 title="删除"
-                @click="del(scope.row.id)"
+                @click="del(scope.$index)"
                 >删除
               </el-button>
               <el-divider
                 v-if="scope.row.isSystemAdmin != 1"
                 direction="vertical"
               ></el-divider>
-              <el-button
+              <!-- <el-button
                 v-if="scope.row.isSystemAdmin != 1"
                 size="small"
                 type="text"
                 @click="resetPwd(scope.row.id)"
                 >重置密码</el-button
-              >
+              > -->
             </template>
           </el-table-column>
         </el-table>
@@ -122,28 +125,44 @@
 
 <script>
 import Dialog from "./dialog";
-
+import { mapState } from "vuex";
+// import {JsonFilter} from 'utils'
 export default {
+  mounted(){
+    if(!this.$store.state.store.myStore.id){
+      this.$router.back()
+    }
+  },
   components: {
     Dialog,
   },
-
+  computed: {
+    ...mapState({
+      myStore: (state) => state.store.myStore,
+    }),
+  },
   data() {
     return {
-      tableData: [],
+      // tableData: [],
       dialogedit: false,
       editTitle: "",
       columnData: [
-        { prop: "picture", label: "图片" },
-        { prop: "userName", label: "商品名称" },
-        { prop: "realName", label: "商品价格（新）" },
-        { prop: "deptName", label: "商品价格（旧）" },
+        { prop: "name", label: "商品名称" },
+        { prop: "newshopprice", label: "商品价格（新）" },
+        { prop: "oldshopprice", label: "商品价格（旧）" },
+        { prop: "count", label: "数量" },
+        { prop: "category", label: "分类" },
         { prop: "remark", label: "备注" },
       ],
     };
   },
 
   methods: {
+    
+    logout(){
+      this.$store.commit('LOGOUT')
+     
+    },
     add() {
       this.dialogedit = true;
       this.editTitle = "商品添加";
@@ -157,6 +176,23 @@ export default {
     },
     //发送新增和修改请求
     EditChange() {},
+    del(value) {
+      console.log(this.myStore.shops)
+      this.$store.commit("DELSHOPS", value);
+    },
+    addShops() {
+      // console.log(JsonFilter( JSON.stringify(this.myStore.shops)))
+      let obj ={
+        shops:JSON.stringify(this.myStore.shops),
+        id: this.myStore.id,
+      };
+      // console.log(obj.shops);
+      if (this.myStore.shops.length) {
+        this.$store.dispatch("ADDSHOP", obj);
+      } else {
+        this.$message.error("没有商品");
+      }
+    },
   },
 };
 </script>
@@ -223,32 +259,7 @@ export default {
   // background-color: #d3dce6;
 }
 
-.top .grid-content {
-  display: flex;
 
-  h1 {
-    width: 30%;
-  }
-
-  .info {
-    width: 30%;
-    display: flex;
-    justify-content: space-evenly;
-
-    &>span {
-      width: 70px;
-      text-align: center;
-
-      .login:hover {
-        color: red;
-      }
-
-      .regist:hover {
-        color: red;
-      }
-    }
-  }
-}
 </style>
 
 <style scoped>

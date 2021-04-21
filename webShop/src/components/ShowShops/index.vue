@@ -4,11 +4,12 @@
           <el-col :span="20" :offset="2">
               <div class="grid-content bg-purple-dark mySet">
                   <el-container style="height:100%">
-                        <el-header>分类名</el-header>
+                        <el-header>{{store.name}}</el-header>
                         <el-container style="height:100%">
-                            <el-aside width="200px">广告</el-aside>
+                          <!-- 广告 -->
+                            <el-aside width="200px"></el-aside>
                             <el-main class="main">
-                                <ShowCard v-for="(shop,index) in 7" :key="index" ></ShowCard>
+                                <ShowCard v-for="(shop,index) in store.shops" :key="index" :shop='shop'></ShowCard>
                                 <div class="more" @click="showMore">查看更多>></div>
                             </el-main>
                         </el-container>
@@ -26,11 +27,12 @@ import ShowCard from 'components/ShowCard'
           ShowCard
       },
       props:{
-        //   shops:Object
+          store:Object
       },
       methods:{
           showMore(){
-              console.log("showMore")
+              // console.log("showMore")
+              this.$router.push('/AllShops')
           }
       }
   }

@@ -2,14 +2,21 @@
   <div class="guider">
       <span @click="direct(0)">首页</span>
       <span @click="direct(1)">购物车</span>
-      <span @click="direct(2)">个人</span>
+      <span @click="direct(2)">订单</span>
       <span @click="direct(3)">客服</span>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 // import router from
+import {mapState} from 'vuex'
   export default {
+      computed:{
+          ...mapState({
+              myStore: state => state.store.myStore,
+              userInfo:state => state.user.userInfo
+          })
+      },
       methods:{
         direct(value){
             /* 0:首页 1:购物车 2:个人中心 3:客服 */
@@ -17,9 +24,9 @@
                 return
             }else{
                 switch(value){
-                    case 0:this.$router.replace('/Msite') ; break
+                    case 0:this.$router.replace(this.userInfo.userid ? '/Msite' : '/MyStore') ; break
                     case 1:this.$router.replace('/ShopCar') ; break
-                    case 2:this.$router.replace('/Person') ; break
+                    case 2:this.$router.replace('/Orders') ; break
                     case 3:this.$router.replace('/Service') ; break
                     default : break
                 }

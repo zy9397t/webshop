@@ -42,7 +42,8 @@
     },
     "rules": {
       "no-unused-vars" : 0,
-      "no-unsafe-negation" : 0
+      "no-unsafe-negation" : 0,
+      "no-prototype-builtins":0
     }
   },
   "browserslist": [

@@ -1,10 +1,14 @@
 import {userLogin,userRegist} from 'api'
-import {USERLOGIN, USERREGIST} from '../mutation_types'
+import {USERLOGIN, USERREGIST,USERCHOOSE,UPDATASHOPCAR} from '../mutation_types'
 
 
 import router from'@/router'
 
-const state = {}
+const state = {
+    userInfo:'',
+    userChoose:'',
+    shopCar:[]
+}
 const actions = {
     async [USERREGIST]({commit},user){
         // console.log(user)
@@ -26,12 +30,22 @@ const actions = {
     async [USERLOGIN]({commit},user){
         const result = await userLogin(user)
         if(!result.code){
-            console.log(result)
+            // console.log('UserLOGINcommit')
+            commit(USERLOGIN,result.data)
+            router.replace('/')
         }
     }
 }
 const mutations={
-
+    [USERLOGIN](state,user){
+        state.userInfo = user
+    },
+    [USERCHOOSE](state,shop){
+        state.userChoose = shop
+    },
+    [UPDATASHOPCAR](state,shop){
+        state.shopCar.push(shop)
+    }
 }
 const getters={}
 

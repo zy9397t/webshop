@@ -61,7 +61,7 @@ export default {
         }
       },
       storeRegistConfig: {
-        title: "普通用户注册",
+        title: "商家用户注册",
         inputsInfo: [
           {
             type: "txt",
@@ -97,7 +97,7 @@ export default {
         } else {
           let rg = /^[1][3,4,5,7,8][0-9]{9}$/;
           if (rg.test(registInfo.phone)) {
-            this.$store.dispatch("STOREREGIST", {
+            this.$store.dispatch("REGISTSTORE", {
               name: registInfo.name,
               phone: registInfo.phone,
               pwd: registInfo.pwd,

@@ -1,9 +1,9 @@
 <template>
   <div class="login">
     <!-- <h1>登录页面</h1> -->
-    <FormCard :config="storeconfig" :callback="storecallback"></FormCard>
 
-    <FormCard :config="userconfig" :callback="usercallback"></FormCard>
+    <FormCard :config="storeconfig" :callback="storecallback" class="login1" ref="login1"></FormCard>
+    <FormCard :config="userconfig" :callback="usercallback" class="login2" ref="login2"></FormCard>
   </div>
 </template>
 
@@ -78,7 +78,12 @@ export default {
         if(!data.phone || !data.pwd){
           this.$message.error('格式错误！')
         }else{
-          this.$store.dispatch("STORELOGIN", data);
+          let rg = /^[1][3,4,5,7,8][0-9]{9}$/
+          if(!rg.test(data.phone)){
+             this.$message.error('手机号不符合规范')
+          }else{
+             this.$store.dispatch("STORELOGIN", data);
+          }
         }
         
       },
@@ -88,6 +93,7 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
+
 .login {
   width: 100vw;
   height: 100vh;
@@ -96,4 +102,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
+
 </style>

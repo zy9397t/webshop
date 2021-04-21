@@ -1,29 +1,6 @@
 <template>
   <div class="main">
-    <div>
-      <el-row :gutter="0" class="top">
-        <el-col :span="24"
-          ><div class="grid-content bg-purple">
-            <h1>{{ position }}</h1>
-            <div class="info">
-              <span v-show="!isLogin"
-                >你好，请<span class="login cup" @click="redirect('Login')"
-                  >登录</span
-                >
-                <span class="regist cup" @click="redirect('Regist')"
-                  >注册</span
-                ></span
-              >
-              <span class="cup">我的订单</span>
-              <span class="cup">我的商店</span>
-              <span class="cup">我的会员</span>
-            </div>
-          </div></el-col
-        >
-
-        <!-- <el-col :span="12"><div class="grid-content bg-purple"></div></el-col> -->
-      </el-row>
-    </div>
+    
     <div class="body">
       <div class="header">
         <div class="title">
@@ -37,9 +14,9 @@
               height="55vh"
               style="width: 33vw; margin-left: 20px; margin-top: 20px"
             >
-              <el-carousel-item v-for="item in 5" :key="item">
+              <el-carousel-item v-for="(url,idx) in imgUrls" :key="idx">
                 <!-- <h3 class="small">{{ item }}</h3> -->
-                <!-- <img src="../../components/ShowCard/img/Redmi-k30.png" style="width:100%" alt=""> -->
+                <img :src='url' style="width:100% ; height:100%" alt="">
               </el-carousel-item>
             </el-carousel>
           </div>
@@ -47,18 +24,19 @@
 
         <div class="container-right">
           <div class="container-title">
-            <span>我是商品</span>
+            <span>{{shop.shopName}}</span>
           </div>
           <div class="container-detail">
             <span>
-              120Hz高帧率流速屏/ 索尼6400万前后六摄 / 6.67'小孔径全面屏 /
+              <!-- 120Hz高帧率流速屏/ 索尼6400万前后六摄 / 6.67'小孔径全面屏 /
               最高可选8GB+256GB大存储 / 高通骁龙730G处理器 / 3D四曲面玻璃机身 /
-              4500mAh+27W快充 / 多功能NFC
+              4500mAh+27W快充 / 多功能NFC -->
+              {{shop.shopRemark}}
             </span>
           </div>
 
           <div class="price">
-            <span>限时价格：1599元</span>
+            <span>限时价格：{{shop.shopNewPrice}}元</span>
             <span>累计销量:4000+</span>
           </div>
 
@@ -70,7 +48,7 @@
           </div>
 
           <div class="shopbutton">
-            <el-button type="danger" style="width: 30vw">加入购物车</el-button>
+            <el-button type="danger" style="width: 30vw" @click="addShopCar">加入购物车</el-button>
           </div>
 
           <div class="pro-policy">
@@ -108,7 +86,24 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
+  computed:{
+    ...mapState({
+      shop:state => state.user.userChoose
+    }),
+    imgUrls(){
+      let arr = []
+      if(this.shop){
+        this.shop.imgs.forEach(imgurl=>{
+        arr.push( `http://localhost:4000/public/${imgurl.imgPath}`)
+      })
+      }else{
+        return []
+      }
+      return arr
+    }
+  },
   data() {
     return {
       footertitle: [
@@ -123,6 +118,12 @@ export default {
       ],
     };
   },
+
+  methods:{
+    addShopCar(){
+      this.$store.commit('UPDATASHOPCAR',this.shop)
+    }
+  }
 };
 </script>
 
@@ -224,7 +225,7 @@ export default {
 
 .body {
   width: 70%;
-  height: 67vh;
+  height: 72vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

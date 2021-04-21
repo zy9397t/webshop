@@ -9,12 +9,12 @@ const routers = require('./routers');
 
 
 const app = express()
-
+app.use('/public',express.static('public'))
 app.use(cors({
     origin:'http://localhost:8080'
 }))
 app.use(express.static('./public'))
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: true,limit:'50mb'}))
 // app.use(bodyParser.urlencoded({ extended: false }))
 // app.use(cookieParser('12345'))
 app.use(session({

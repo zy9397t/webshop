@@ -8,7 +8,7 @@ module.exports = function(router) {
         res.header('Access-Control-Allow-Credentials',true)
         // const {phone,pwd,captcha} = req.body
         const {phone,pwd} = req.body
-        console.log(phone,pwd)
+        // console.log(phone,pwd)
         // console.log(req.session.captcha)
         // console.log("id"+req.session.id)
         // if(req.session.captcha !== captcha.toLowerCase()){
@@ -44,6 +44,12 @@ module.exports = function(router) {
         })
     }),
 
+    router.post('/addOrder',(req,res)=>{
+        const {userId,storeID,order} = req.body
+        console.log(userId,storeID,order)
+            // userModel.updateOne({id:userId})
+        
+    })
     
     router.post('/registUser',(req,res)=>{
         const {name,phone,pwd,others} = req.body

@@ -1,15 +1,18 @@
 import Msite from 'pages/Msite'
-import Person from 'pages/Person'
+import Orders from 'pages/Orders'
 import Service from 'pages/Service'
 import ShopCar from 'pages/ShopCar'
 import MyStore from 'pages/MyStore'
 
 import ShopDetail from 'pages/ShopDetail'
-// import AllShops from 'pages/AllShops'
+import AllShops from 'pages/allShops'
 
 
 import Login from 'pages/Login'
 import Regist from 'pages/Regist'
+
+// import SearchSops from 'pages/searchshops'
+
 
 
 export default [
@@ -24,8 +27,8 @@ export default [
 
 
     {
-        path:'/Person',
-        component:Person
+        path:'/Orders',
+        component:Orders
     },
     {
         path:'/Service',
@@ -53,5 +56,9 @@ export default [
         children:[
           
         ] 
+    },
+    {
+        path:'/AllShops',
+        component:AllShops
     }
 ]
