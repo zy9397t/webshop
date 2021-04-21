@@ -50,12 +50,19 @@ import {mapState} from 'vuex'
     // border 1px solid red
     color #fff
     font-font-weight border 
-    font-size 14px
+    font-size 12px
     cursor pointer
     span 
-        background-color green
+        // background-color green
+        border-radius 50%
+        background-color #ccc
         height 24%
         text-align center
         line-height 50px
+        border 1px solid white
+        &:hover 
+            color #ccc 
+            background-color white
+            border 1px solid #ccc
 
 </style>

@@ -204,12 +204,15 @@ export default {
     ShowShops,
     Footer,
   },
+  created(){
+    this.$store.dispatch("GETSTORES");
+  },
   mounted() {
     // let date = new Date()
     setInterval(() => {
       this.timeNow = new Date();
     }, 1000);
-    this.$store.dispatch("GETSTORES");
+    
 
   },
   data() {

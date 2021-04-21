@@ -20,6 +20,14 @@
 import Searchshops from "components/searchshops";
 import Footer from "components/Footer"
 export default {
+	data(){
+		return {
+			keyWords:''
+		}
+	},
+	methods:{
+		search(){}
+	},
   components:{
     Footer,
 	Searchshops

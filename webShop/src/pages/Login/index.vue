@@ -1,20 +1,22 @@
 <template>
   <div class="login">
     <!-- <h1>登录页面</h1> -->
-
-    <FormCard :config="storeconfig" :callback="storecallback" class="login1" ref="login1"></FormCard>
-    <FormCard :config="userconfig" :callback="usercallback" class="login2" ref="login2"></FormCard>
+    <div class="switch" @click="QH" >切换身份</div>
+    <FormCard :config="storeconfig" :callback="storecallback" class="login1" ref="login1" v-if="isUserLogin"></FormCard>
+    <FormCard :config="userconfig" :callback="usercallback" class="login2" ref="login2" v-else></FormCard>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import FormCard from "components/FormCard";
 export default {
+
   components: {
     FormCard,
   },
   data() {
     return {
+      isUserLogin:false,
       userconfig: {
         title: "普通用户登录",
         inputsInfo: [
@@ -89,6 +91,11 @@ export default {
       },
     };
   },
+  methods:{
+    QH(){
+      this.isUserLogin = !this.isUserLogin
+    }
+  }
 };
 </script>
 
@@ -97,11 +104,33 @@ export default {
 .login {
   width: 100vw;
   height: 100vh;
+  position relative
   background: skyblue;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
+.switch 
+  position absolute
+  left 45vw
+  top 10vh
+  width 7vw
+  height 5vh
+  border 1px solid white
+  background-color #09c
+  border-radius 5px
+  text-align center 
+  line-height 5vh
+  font-size 12px
+  font-weight bolder
+  color white
+  cursor pointer
+  user-select none
+  &:hover 
+    color #09c 
+    background-color white
+    transform rotateZ(360deg)
+    // transition transform .5 ease
+    transition  all .5s ease
 
 </style>

@@ -11,6 +11,8 @@ import AllShops from 'pages/allShops'
 import Login from 'pages/Login'
 import Regist from 'pages/Regist'
 
+import Users from 'pages/Users'
+
 // import SearchSops from 'pages/searchshops'
 
 
@@ -25,7 +27,10 @@ export default [
         redirect:'/Msite'
     },
 
-
+    {
+        path:'/Users',
+        component:Users
+    },
     {
         path:'/Orders',
         component:Orders

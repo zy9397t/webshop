@@ -1,7 +1,14 @@
 <template>
-  <div class="regist">
-    <FormCard :config="userRegistConfig" :callback="userCallback"></FormCard>
-    <FormCard :config="storeRegistConfig" :callback="storeCallback"></FormCard>
+  <div class="container">
+    <div class="switch" @click="QH">切换身份</div>
+    <div class="regist">
+      <FormCard :config="userRegistConfig" :callback="userCallback" v-if="isUserRegist"></FormCard>
+      <FormCard
+        v-else
+        :config="storeRegistConfig"
+        :callback="storeCallback"
+      ></FormCard>
+    </div>
   </div>
 </template>
 
@@ -12,7 +19,9 @@ export default {
     FormCard,
   },
   data() {
+    
     return {
+      isUserRegist:true,
       userRegistConfig: {
         title: "普通用户注册",
         inputsInfo: [
@@ -109,6 +118,11 @@ export default {
       },
     };
   },
+  methods:{
+    QH(){
+      this.isUserRegist = !this.isUserRegist
+    }
+  }
 };
 </script>
 
@@ -121,4 +135,28 @@ export default {
   align-items: center;
   background-color: skyblue;
 }
+
+.switch 
+  position absolute
+  left 45vw
+  top 10vh
+  width 7vw
+  height 5vh
+  border 1px solid white
+  background-color #09c
+  border-radius 5px
+  text-align center 
+  line-height 5vh
+  font-size 12px
+  font-weight bolder
+  color white
+  cursor pointer
+  user-select none
+  &:hover 
+    color #09c 
+    background-color white
+    transform rotateZ(360deg)
+    // transition transform .5 ease
+    transition  all .5s ease
+
 </style>

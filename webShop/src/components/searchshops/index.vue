@@ -6,7 +6,7 @@
                   <el-container style="height:100%">
                         <el-container style="height:100%">
                             <el-main class="main">
-                                <ShowCard v-for="(shop,index) in 8" :key="index" ></ShowCard>
+                                <ShowCard v-for="(shop,index) in stores[2].shops" :key="index" :shop='shop' ></ShowCard>
                             </el-main>
                         </el-container>
                    </el-container>
@@ -18,9 +18,16 @@
 
 <script type="text/ecmascript-6">
 import ShowCard from 'components/ShowCard'
+import {mapState} from 'vuex'
+
   export default {
       components:{
           ShowCard
+      },
+      computed:{
+        ...mapState({
+          stores:state => state.stores
+        })
       },
       props:{
         //   shops:Object
