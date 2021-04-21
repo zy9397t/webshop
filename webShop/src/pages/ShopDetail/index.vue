@@ -24,25 +24,25 @@
 
         <div class="container-right">
           <div class="container-title">
-            <span>{{shop.shopName}}</span>
+            <span>{{shop.name}}</span>
           </div>
           <div class="container-detail">
             <span>
               <!-- 120Hz高帧率流速屏/ 索尼6400万前后六摄 / 6.67'小孔径全面屏 /
               最高可选8GB+256GB大存储 / 高通骁龙730G处理器 / 3D四曲面玻璃机身 /
               4500mAh+27W快充 / 多功能NFC -->
-              {{shop.shopRemark}}
+              {{shop.remark}}
             </span>
           </div>
 
           <div class="price">
-            <span>限时价格：{{shop.shopNewPrice}}元</span>
-            <span>累计销量:4000+</span>
+            <span>限时价格：{{shop.newshopprice}}元</span>
+            <span>库存:{{shop.count}}</span>
           </div>
 
           <div class="shopdescribe">
             <div class="shopdetail">
-              <span class="data">重量：0.66kg</span>
+              <span class="data">重量：{{Math.ceil(Math.random() * 10 )  / 10}}kg</span>
               <span class="data">配送时间：预计明天到达</span>
             </div>
           </div>
