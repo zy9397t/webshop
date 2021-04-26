@@ -5,12 +5,45 @@ const {
     round,
     random
 } = require('mathjs')
+const user = require('./user')
 module.exports = function (router) {
+
+    router.post('/changeOrderStatus',(req,res) => {
+        const { userId,storeId,orderId } = req.body
+        // console.log(userId,storeId,orderId)
+        storeModel.updateOne({id:storeId,"orders.id":orderId},{$set:{'orders.$.status':1}},(error,result) => {
+            if(error){
+                res.send({code:1,error})
+            }
+        })
+
+        userModel.updateOne({id:userId,"orders.id":orderId},{$set:{'orders.$.status':1}},(error,result) => {
+            if(error){
+                res.send({code:1,error})
+            }else{
+                res.send({code:0,data:{}})
+            }
+        })
+    })
+
+    router.post('/getStoreOrders',(req,res) => {
+        const { storeid } = req.body
+        // console.log(storeid)
+        storeModel.findOne({id:storeid},(error,result) => {
+            if(error){
+                res.send({code:1,error})
+            }else{
+                // console.log(result)
+                res.send({code:0,data:{orders:result.orders}})
+            }
+        })
+    })
 
     router.get('/getStores', (req, res) => {
         storeModel.find({}, (error, Stores) => {
             // console.log(error, Stores)
             if(!error){
+                
                 res.send({
                     code: 0,
                     data: Stores.map((store)=>{
@@ -18,7 +51,7 @@ module.exports = function (router) {
                             id:store.id,
                             name:store.name,
                             phone:store.owner,
-                            shops:store.shops
+                            shops:JSON.stringify(store.shops)
                         }
                         return obj
                     })
@@ -31,11 +64,11 @@ module.exports = function (router) {
     })
 
     router.post('/addShop', (req, res) => {
-        const {
+        let {
             id,
             shops
         } = req.body
-
+        shops = JSON.parse(shops)
         storeModel.findOne({
             id
         }, (error, store) => {
@@ -73,16 +106,20 @@ module.exports = function (router) {
             // console.log(store)
             if (!error && store && (store.pwd === pwd)) {
                 // console.log(store.shops),
-                res.send({
-                    code: 0,
-                   
-                    data: {
-                        id:store.id,
-                        name: store.name,
-                        shops: store.shops ,
-                        orders:store.orders
-                    }
-                })
+                 if(store.status){
+                    res.send({code:1,error:'该帐号已封禁！'})
+                }else{
+                    res.send({
+                        code: 0,
+                        data: {
+                            id:store.id,
+                            name: store.name,
+                            shops: JSON.stringify(store.shops ),
+                            // orders:JSON.stringify(store.orders)
+                        }
+                    })
+                }
+                
             } 
             else {
                 res.send({
@@ -91,17 +128,13 @@ module.exports = function (router) {
                 })
             }
         })
-        // res.send({code:0})
     })
 
     router.post('/registStore', (req, res) => {
-        // req.body.storeName
-        // const {storeName,phoneNum} = req.body
         const storeName = req.body.name
         const phoneNum = req.body.phone
         const pwd = req.body.pwd
-        // console.log(req.body)
-        // console.log(storeName,phoneNum)
+        const status = req.body.status
         if (!storeName || !phoneNum || !pwd) {
             // console.log("为空")
             res.send({
@@ -113,15 +146,14 @@ module.exports = function (router) {
         storeModel.find({
             owner: phoneNum
         }, (error, store) => {
-            // console.log(1)
-            // console.log(error,store)
             if (!error && !store.length) {
                 let store = {
                     id: 'store' + round(random(0, 15) * 10000),
                     pwd: pwd,
                     name: storeName,
                     owner: phoneNum,
-                    shops: '',
+                    status,
+                    shops: [],
                 }
                 storeModel.create(store)
                     .then(result => {

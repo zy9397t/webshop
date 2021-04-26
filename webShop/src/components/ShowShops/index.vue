@@ -7,10 +7,11 @@
                         <el-header>{{store.name}}</el-header>
                         <el-container style="height:100%">
                           <!-- 广告 -->
-                            <el-aside width="200px"></el-aside>
+                            <el-aside width="200px">{{adInfo}}</el-aside>
                             <el-main class="main">
-                                <ShowCard v-for="(shop,index) in store.shops" :key="index" :shop='shop'></ShowCard>
-                                <div class="more" @click="showMore">查看更多>></div>
+                                <ShowCard v-for="(shop,index) in store.shops" :key="index" :shop='shop' class="showCard" :storeInfo='storeInfo'></ShowCard>
+                                <!-- <div class="more" @click="showMore">查看更多>></div> -->
+                                <ShowCard :more="true" :storeInfo='storeInfo'></ShowCard>
                             </el-main>
                         </el-container>
                    </el-container>
@@ -27,7 +28,13 @@ import ShowCard from 'components/ShowCard'
           ShowCard
       },
       props:{
-          store:Object
+          store:Object,
+          storeInfo:Object
+      },
+      data(){
+        return{
+          adInfo:'侧边栏'
+        }
       },
       methods:{
           showMore(){
@@ -112,22 +119,11 @@ import ShowCard from 'components/ShowCard'
     height 500px
 
   .main 
-    display flex 
-    justify-content space-evenly
     background #d3dce6
+    display flex 
+    justify-content left
     flex-wrap wrap
 
-  .more 
-    width 24%
-    height 45%
-    background-color #fff
-    display flex 
-    justify-content center
-    align-items center
-    font-size 12px
-    cursor pointer
-    &:hover
-        color red
 
 
  

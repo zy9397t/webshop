@@ -39,3 +39,30 @@ export function addShop(data){
 export function getStores(){
     return instance.get('/getStores')
 }
+
+export function apply(data){
+    return instance.post('/apply',data)
+}
+
+export function getUserOrders(data){
+    return instance.post('/getUserOrders',data)
+}
+export function getStoreOrders(data){
+    return instance.post('/getStoreOrders',data)
+}
+export function changeOrderStatus(data){
+    return instance.post('/changeOrderStatus',data)
+}
+
+export function adminLogin(data){
+    return instance.post('/adminLogin',data)
+}
+
+export function searchUsers(data){
+    return instance.post('/searchUsers',data)
+}
+export function changUserStatus(data){
+    return instance.post('/changUserStatus',data)
+}
+
+

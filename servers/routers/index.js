@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const fs = require('fs')
 
-const {createSVG} =require('../utils/index')
+const {createSVG,searchStores,searchUsers} =require('../utils/index')
 const test = require('./test')
 const user = require('./user')
 const store = require('./store')
@@ -11,6 +11,11 @@ const store = require('./store')
 var multiparty = require('multiparty'); var images = require("images");
 
 const {goods,ratings,info} = require('../data/data.json')
+const adminModel = require('../model/adminModel')
+const userModel = require('../model/userModel')
+const storeModel = require('../model/storeModel')
+
+
 test(router)
 user(router)
 store(router)
@@ -21,28 +26,62 @@ router.get('/index_category',function(req,res){
         res.send({code:0,data})
     },1000)
 })
+router.post('/changUserStatus',(req,res) => {
+    const {id,status} = req.body 
+    if((id.indexOf('user')+1)){
+        //改变普通用户
+        userModel.updateOne({id},{$set:{status}},(error,result) =>{
+            if(error){
+                res.send({code:1,error})
+            }else{
+                res.send({code:0,data:{}})
+            }
+        })
+    }else{
+        //改变商家用户
+        storeModel.updateOne({id},{$set:{status}},(error,result) =>{
+            if(error){
+                res.send({code:1,error})
+            }else{
+                res.send({code:0,data:{}})
+            }
+        })
+    }
+})
 
+router.post('/adminLogin',(req,res)=>{
+    const {id,pwd} = req.body
+    adminModel.findOne({id,pwd} , (error,result) => {
+        if(error){
+            res.send({code:1,error})
+        }else{
+            if(result){
+                res.send({code:0,data:{}})
+            }else{
+                res.send({code:1,error:'账号或密码错误'})
+            }
+        }
+    })
+})
 
-
+router.post('/searchUsers',(req,res)=>{
+    const {keyWords,type} = req.body
+    if(type === 'user'){
+       searchUsers(keyWords,userModel,res)
+    }else{
+        searchStores(keyWords,storeModel,res)
+    }
+})
 router.post('/img',(req,res)=>{
-    // console.log('/imgpost')
-    // console.log(req)
     var form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
-        // console.log(files)
-        // fs.writeFileSync('/public/test.png',fs.readFileSync(files.file[0].path))
-        //   
-        // console.log("public/" + files.file[0].originalFilename)
         let filename = "public/" + files.file[0].originalFilename 
         let rz = /(\.png|\.jpg)$/i
         if(rz.test(filename)){
-            images(files.file[0].path) //Load image from file 
+            images(files.file[0].path)
             //加载图像文件
-            .size(1920) //Geometric scaling the image to 400 pixels width
-            //等比缩放图像到400像素宽
-
-            //在(10,10)处绘制Logo
-            .save(filename , { //Save the image to a file,whih quality 50
+            .size(1920)
+            .save(filename , { 
                 quality: 80 //保存图片到文件,图片质量为50
             });
  

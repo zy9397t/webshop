@@ -42,19 +42,21 @@
 
           <div class="shopdescribe">
             <div class="shopdetail">
-              <span class="data">重量：{{Math.ceil(Math.random() * 10 )  / 10}}kg</span>
+              <span class="data">重量：{{weight}}kg</span>
               <span class="data">配送时间：预计明天到达</span>
+              <span><el-input-number v-model="shopCount" controls-position="right" @change="handleChange" :min=1 :max=99 size="mini"></el-input-number></span>
             </div>
           </div>
 
           <div class="shopbutton">
-            <el-button type="danger" style="width: 30vw" @click="addShopCar">加入购物车</el-button>
+            <el-button type="danger" style="width: 30vw" @click="addShopCar" :disabled='disabled'>{{disabled ? '已在购物车中':'加入购物车'}}</el-button>
           </div>
 
           <div class="pro-policy">
             <ul>
               <li><i class="el-icon-circle-check"></i> 7天无理由退货</li>
               <li><i class="el-icon-circle-check"></i> 7天价格保护</li>
+              <li></li>
             </ul>
           </div>
         </div>
@@ -88,10 +90,24 @@
 <script>
 import { mapState } from "vuex";
 export default {
+  mounted(){
+    this.weight = Math.ceil(Math.random() * 10 )  / 10
+  },
   computed:{
     ...mapState({
-      shop:state => state.user.userChoose
+      shop:state => state.user.userChoose,
+      shopCarShopsId: state => state.user.shopCarShopsId
     }),
+
+    disabled(){
+      let flag = false
+      this.shopCarShopsId.forEach( imgurl => {
+        if(imgurl == this.shop.imgurel){
+          flag = true
+        }
+      })
+      return flag
+    },
     imgUrls(){
       let arr = []
       if(this.shop){
@@ -106,6 +122,8 @@ export default {
   },
   data() {
     return {
+      weight:1,
+      shopCount:1,
       footertitle: [
         { label: "关于我们" },
         { label: "联系我们" },
@@ -118,10 +136,21 @@ export default {
       ],
     };
   },
-
   methods:{
     addShopCar(){
-      this.$store.commit('UPDATASHOPCAR',this.shop)
+      if(this.$store.state.user.userInfo.userid){
+        this.shop.shopCount = this.shopCount
+        this.$store.commit('UPDATASHOPCAR',this.shop)
+        this.$message.success('添加成功')
+      }else{
+        this.$message.error('请先登录！')
+        this.$router.push('/Login')
+      }
+    },
+
+
+    handleChange(value){
+
     }
   }
 };

@@ -1,7 +1,7 @@
 <template>
-  <div class="guider">
+  <div class="guider" v-if="showGuider">
       <span @click="direct(0)">首页</span>
-      <span @click="direct(1)">购物车</span>
+      <span @click="direct(1)" v-if="userInfo.userid">购物车</span>
       <span @click="direct(2)">订单</span>
       <span @click="direct(3)">客服</span>
   </div>
@@ -11,11 +11,17 @@
 // import router from
 import {mapState} from 'vuex'
   export default {
+      mounted(){
+
+      },
       computed:{
           ...mapState({
               myStore: state => state.store.myStore,
               userInfo:state => state.user.userInfo
-          })
+          }),
+          showGuider(){
+              return this.$route.path !== '/Users' && this.$route.path !== '/adminLogin'
+          }
       },
       methods:{
         direct(value){
@@ -24,7 +30,7 @@ import {mapState} from 'vuex'
                 return
             }else{
                 switch(value){
-                    case 0:this.$router.replace(this.userInfo.userid ? '/Msite' : '/MyStore') ; break
+                    case 0:this.$router.replace(this.myStore.id ? '/MyStore' : '/Msite') ; break
                     case 1:this.$router.replace('/ShopCar') ; break
                     case 2:this.$router.replace('/Orders') ; break
                     case 3:this.$router.replace('/Service') ; break

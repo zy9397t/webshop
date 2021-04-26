@@ -7,6 +7,9 @@ const storeSchema = new Schema({
     id:{
         type:String
     },
+    status:{
+        type:Number
+    },
     name:{
         type:String
     },
@@ -18,7 +21,7 @@ const storeSchema = new Schema({
         type:String
     },
     shops:{
-        type:String
+        type:Object
     },
     orders:{
         type:Object

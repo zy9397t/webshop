@@ -1,5 +1,5 @@
 <template>
-  <div class="showcard" @click="redirect('/ShopDetail')">
+  <div class="showcard" @click="redirect('/ShopDetail')" v-if="!more">
       <img :src='indexImgUrl' alt="">
       <div class="shopName">{{shop.name}}</div>
       <div class="shopDetails">{{shop.remark}}</div>  
@@ -8,16 +8,30 @@
             <div class="oldPrice"><strike>{{shop.oldshopprice}}元</strike></div>
       </div>  
   </div>
+  <div class="showcard more" v-else>查看更多-></div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
-      props:[
-          'shop'
-      ],
+      props:{
+          shop:{
+              type:Object
+          },
+          more:{
+              type:Boolean,
+              default:false
+          },
+          storeInfo:Object
+      },
       methods:{
           redirect(address){
-              this.$store.commit('USERCHOOSE',this.shop)
+              let obj = {}
+              Object.keys(this.shop).forEach( key => {
+                  obj[key] = this.shop[key]
+              })
+              obj.storeName = this.storeInfo.storeName 
+              obj.storeID = this.storeInfo.storeID
+              this.$store.commit('USERCHOOSE',obj)
               this.$router.push(address)
           }
       },
@@ -30,6 +44,15 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
+.more 
+    background-color #fff
+    display flex 
+    justify-content center
+    align-items center
+    font-size 12px
+    cursor pointer
+    &:hover
+        color red
 .showcard 
     height 45%
     width 24%

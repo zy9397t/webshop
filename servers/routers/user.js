@@ -3,7 +3,43 @@ const storeModel = require('../model/storeModel')
 const {createToken} = require('../utils')
 const {round,random} = require('mathjs')
 const jwt = require('jsonwebtoken')
+const e = require('express')
 module.exports = function(router) {
+
+    router.post('/getUserOrders',(req,res)=>{
+        const {userid} = req.body
+        userModel.findOne({id:userid},(error,result) => {
+            if(error){
+                res.send({code:1,error})
+            }else{
+                res.send({code:0,data:{Orders:JSON.stringify(result.orders)}})
+            }
+        }) 
+    })
+
+    router.post('/apply',(req,res)=>{
+        const orderInfo = JSON.parse(req.body.order)
+        // console.log(orderInfo)
+        let storeID = orderInfo.shops[0].storeID
+
+
+        storeModel.updateOne({id:storeID},{$addToSet:{orders:orderInfo}},(error,result) => {
+            if(error){
+                res.send({code:1,error})
+            }else{
+                console.log('添加订单成功')
+            }
+        })
+        userModel.updateOne({id:orderInfo.userID},{$addToSet:{orders:orderInfo}},(error,result)=>{
+            if(error){
+                res.send({code:1,error})
+            }else{
+                res.send({code:0,data:'添加成功'})
+            }
+        })
+    })
+
+
     router.post('/login_pwd',function(req,res){
         res.header('Access-Control-Allow-Credentials',true)
         // const {phone,pwd,captcha} = req.body
@@ -20,23 +56,23 @@ module.exports = function(router) {
         // res.send({code:0})
         userModel.findOne({phone},(error,user)=>{
             if(error || !user){
-                // res.send({code:1,data:{errorMessage:'账号或密码错误'}})
                 res.send({code:1,error:'账号或密码错误'})
             }else{
                 if(pwd !== user.pwd){
-                    // res.send({code:1,data:{errorMessage:'账号或密码错误'}})
                     res.send({code:1,error:'账号或密码错误'})
-                }else{
+                }
+                else if(user.status){
+                    res.send({code:1,error:'该帐号已封禁！'})
+                }
+                else{
                     req.session.destroy()
                     res.send({code:0,data:{
-                        // user:{user_id:user.id,name:user.name,phone:user.phone},
-                        // token:createToken(user.id)
                         userid:user.id,
                         username:user.name,
                         userVip:user.vip,
                         userphone:user.phone,
                         userothers:user.others,
-                        userorders:user.orders
+                        // userorders:JSON.stringify(user.orders)
                     }
                 })
                 }
@@ -52,8 +88,8 @@ module.exports = function(router) {
     })
     
     router.post('/registUser',(req,res)=>{
-        const {name,phone,pwd,others} = req.body
-        console.log(name,phone,pwd,others)
+        const {name,phone,pwd,others,status} = req.body
+        // console.log(name,phone,pwd,others)
         userModel.findOne({phone},(err,user)=>{
             if(!err){
                 console.log(user)
@@ -63,6 +99,7 @@ module.exports = function(router) {
                         name,
                         phone,
                         pwd,
+                        status,
                         vip:false,
                         others:{},
                         orders:{}
@@ -110,4 +147,6 @@ module.exports = function(router) {
         }
         // res.send(1)
     })
+
+   
 }

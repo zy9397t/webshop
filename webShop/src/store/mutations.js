@@ -4,8 +4,10 @@ export default {
     [LOGOUT](state){
         if(state.user.userInfo){
             state.user.userInfo = ''
+            state.user.orders = []
         }else if(state.store.myStore){
             state.store.myStore = ''
+            state.store.orders = []
             router.replace('/Login')
         }else{
             return

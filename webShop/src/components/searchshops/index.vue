@@ -6,7 +6,7 @@
                   <el-container style="height:100%">
                         <el-container style="height:100%">
                             <el-main class="main">
-                                <ShowCard v-for="(shop,index) in stores[2].shops" :key="index" :shop='shop' ></ShowCard>
+                                <ShowCard v-for="(shop,index) in shops" :key="index" :shop='shop' ></ShowCard>
                             </el-main>
                         </el-container>
                    </el-container>
@@ -30,7 +30,7 @@ import {mapState} from 'vuex'
         })
       },
       props:{
-        //   shops:Object
+          shops:Array
       },
       methods:{
           showMore(){

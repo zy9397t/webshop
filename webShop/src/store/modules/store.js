@@ -1,47 +1,49 @@
-import {REGISTSTORE,STORELOGIN,ADDSHOP,UPDATASHOPS,DELSHOPS} from '../mutation_types'
-import {registStore,storeLogin,addShop} from 'api'
+import {REGISTSTORE,STORELOGIN,ADDSHOP,UPDATASHOPS,DELSHOPS,GETSTOREORDERS,CHANGEORDERSTATUS} from '../mutation_types'
+import {registStore,storeLogin,addShop,getStoreOrders,changeOrderStatus} from 'api'
 import router from '@/router'
-import {JsonFilter} from 'utils'
+import vue from '../../main'
 export default {
     state:{
-        registStoreResult:'',
-        myStore:''
+        // registStoreResult:'',
+        myStore:'',
+        orders:[]
     },
     actions:{
+
+        async [CHANGEORDERSTATUS]({commit},info){
+            // console.log(info)
+            const { storeId , userId , orderId , orderIndex} = info
+            const result = await changeOrderStatus({storeId,userId,orderId})
+            if(!result.error){
+                vue.$message.success('操作成功')
+                commit(CHANGEORDERSTATUS,orderIndex)
+            }
+        },
+
         async [REGISTSTORE]({commit},store){
-            // console.log(store)
             const result = await registStore(store)
-            // console.log(result)
             if(!result.code){
-                window.alert('注册成功！将跳转至登录页面')
+                // window.alert('注册成功！将跳转至登录页面')
+                vue.$message.success('注册成功！将跳转至登录页面')
                 router.replace('/Login')
             }
         },
 
-        // async [GETMYSTORE]({commit},data){
-        //     const result = await getMyStore(data)
-        //     console.log(result)
-        //     if(!result.code){
-        //         commit(GETMYSTORE,result.data)
-        //     }else(
-        //         commit(GETMYSTORE,{})
-        //     )
-        // },
+        async [GETSTOREORDERS]({commit},storeid){
+            const restult = await getStoreOrders({storeid})
+            if(!restult.code){
+                commit(GETSTOREORDERS,restult.data.orders)
+            }
+        },
 
         async [STORELOGIN]({commit},data){
             // console.log(data)
             const restult = await storeLogin(data)
             if(!restult.code){
-                console.log(restult.data.shops)
+                // console.log(restult.data.shops)
                 if(restult.data.shops){
-                    restult.data.shops = JSON.parse(JsonFilter(restult.data.shops))
+                    restult.data.shops = JSON.parse(restult.data.shops)
                 }
-                // console.log(JSON.parse(JsonFilter(restult.data.shops))[0].imgurel)
-                // if(restult.data.shops){
-                //     restult.data.shops.forEach(element => {
-                //         element.imgurel = element.shopPics[0].base64URL
-                //     });
-                // }
                 router.replace('/MyStore')
                 commit(STORELOGIN,restult.data)
             }
@@ -51,7 +53,7 @@ export default {
             if(!result.code){
                 window.alert('添加成功')
             }
-        }
+        },
     },
     mutations:{
         [REGISTSTORE](state,registStoreResult){
@@ -67,9 +69,9 @@ export default {
             state.myStore=store
         },
         [UPDATASHOPS](state,shop){
-            console.log(shop)
+            // console.log(shop)
             if(shop.imgs.length){
-                console.log(1)
+                // console.log(1)
                 shop.imgurel = shop.imgs[0].imgPath
             }
             state.myStore.shops.push(shop)
@@ -80,6 +82,12 @@ export default {
                 state.myStore.shops.splice(index,1)
             }
             // console.log(state.myStore.shops)
+        },
+        [GETSTOREORDERS](state,orders){
+            state.orders = orders
+        },
+        [CHANGEORDERSTATUS](state,index){
+            state.orders[index].status = 1
         }
     },
     getters:{}

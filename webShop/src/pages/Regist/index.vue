@@ -60,6 +60,7 @@ export default {
           let rg = /^[1][3,4,5,7,8][0-9]{9}$/;
           if (rg.test(registInfo.phone)) {
             this.$store.dispatch("USERREGIST", {
+              status:0,
               name: registInfo.name,
               phone: registInfo.phone,
               pwd: registInfo.pwd,
@@ -107,6 +108,7 @@ export default {
           let rg = /^[1][3,4,5,7,8][0-9]{9}$/;
           if (rg.test(registInfo.phone)) {
             this.$store.dispatch("REGISTSTORE", {
+              status:0,
               name: registInfo.name,
               phone: registInfo.phone,
               pwd: registInfo.pwd,

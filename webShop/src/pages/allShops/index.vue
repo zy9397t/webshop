@@ -2,13 +2,13 @@
   <div class="main">
     <div class="headcontainer">
       <div class="search">
-        <input type="text" v-model="keyWords" />
-        <div @click="search" class="cup">搜索</div>
+        <input type="text" v-model="keyWords" placeholder='请输入关键字'/>
+        <div @click="search" class="cup button">搜索</div>
       </div>
     </div>
 	<div class="container">
     <div class="bodycontainer">
-		<Searchshops></Searchshops>
+		<Searchshops :shops = 'searchShops'></Searchshops>
 	</div>
 
 	</div>
@@ -19,7 +19,11 @@
 <script>
 import Searchshops from "components/searchshops";
 import Footer from "components/Footer"
+import {mapState} from 'vuex'
 export default {
+	mounted(){
+		this.keyWords = this.$route.query.keyWords
+	},
 	data(){
 		return {
 			keyWords:''
@@ -28,6 +32,34 @@ export default {
 	methods:{
 		search(){}
 	},
+	computed:{
+		...mapState({
+			stores : state => state.stores
+		}),
+		searchShops(){
+			let arr = []
+			// this.stores.forEach( store => {
+			// 	arr.push(store.shops.filter(shop => {shop.name.indexOf(this.keyWords)
+			// 	}))
+			// })
+
+			for(let storeInd in this.stores){
+				let store = this.stores[storeInd]
+				for(let shopInd in store.shops){
+					let shop = store.shops[shopInd]
+					if(shop.name.indexOf(this.keyWords)+1 ){
+						
+						shop.storeID = store.id
+						shop.storeName = store.name 
+						shop.phone = store.phone
+						
+						arr.push(shop)
+					}
+				}
+			}
+			return arr
+		}
+	},
   components:{
     Footer,
 	Searchshops
@@ -35,6 +67,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .main {
 	display: flex;
 	flex-direction: column;
@@ -52,14 +85,26 @@ export default {
 	display: flex;
 	width: 40vw;
 	margin-top: 5vh;
+	/* height: 40px; */
 }
 
 input {
 	border: 2px solid #e1251b;
 	width: 80%;
-	height: 20px;
+	height: 30px;
 	box-sizing: border-box;
 	padding-left: 10px;
+	font-size: 12px;
+}
+.button {
+	height: 30px;
+	width: 10%;
+	line-height: 30px;
+	color: #fff;
+	background-color: #e1251b;
+	font-weight: bolder;
+	text-align: center;
+	font-size: 12px;
 }
 
 .container{
@@ -77,13 +122,7 @@ input {
 }
 
 .cup {
-	width: 10%;
-	line-height: 20px;
-	height: 20px;
-	color: #fff;
-	background-color: #e1251b;
-	font-weight: bolder;
-	text-align: center;
+	
 	cursor: pointer;
 }
 

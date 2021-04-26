@@ -12,6 +12,7 @@ import Login from 'pages/Login'
 import Regist from 'pages/Regist'
 
 import Users from 'pages/Users'
+import adminLogin from 'pages/adminLogin'
 
 // import SearchSops from 'pages/searchshops'
 
@@ -65,5 +66,9 @@ export default [
     {
         path:'/AllShops',
         component:AllShops
+    },
+    {
+        path:'/adminLogin',
+        component:adminLogin
     }
 ]

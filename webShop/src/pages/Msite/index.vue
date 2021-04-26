@@ -18,8 +18,7 @@
             <!-- <span class="cup" @click="getMyStore()">我的商店</span> -->
             <span class="cup">我的会员</span>
           </div>
-        </div></el-col
-      >
+        </div></el-col>
 
       <!-- <el-col :span="12"><div class="grid-content bg-purple"></div></el-col> -->
     </el-row>
@@ -38,7 +37,7 @@
           <div class="top">
             <!-- <div class="search"></div> -->
             <div class="search">
-              <input type="text" v-model="searchkeyWords" />
+              <input type="text" v-model="searchkeyWords"  @keyup.enter="search" />
               <div @click="search" class="cup">搜索</div>
             </div>
             <div class="keys">
@@ -185,13 +184,18 @@
       </el-row>
 
       <ShowShops
-        v-for="(shops, index) in allstores"
+        v-for="(store, index) in allstores"
         :key="index"
-        :store="shops"
+        :store="store"
+        :storeInfo='{storeName:store.name,storeID:store.id}'
       ></ShowShops>
     </div>
 
     <Footer></Footer>
+
+
+
+
   </div>
 </template>
 
@@ -213,10 +217,11 @@ export default {
       this.timeNow = new Date();
     }, 1000);
     
-
   },
   data() {
     return {
+
+      arr : [],
       position: "广东",
       timeNow: 0,
       // msg:'你好，请'
@@ -242,15 +247,18 @@ export default {
       //   case 'regist' : this.$router.push('/regist');break
       //   default : break
       // }
-
-      console.log(this.allstores)
       this.$router.push(value);
     },
     getMyStore() {
       this.$router.push("/myStore");
     },
     search() {
-      this.redirect("/AllShops");
+      // this.redirect("/AllShops");
+      if(!this.searchkeyWords){
+        this.$message.error('请输入关键字')
+      }else{
+        this.$router.push({path:'/AllShops',query:{keyWords:this.searchkeyWords}})
+      }
     },
     logout() {
       this.$store.commit("LOGOUT");
@@ -260,34 +268,8 @@ export default {
     ...mapState({
       myStore: (state) => state.store.myStore,
       userInfo: (state) => state.user.userInfo,
-      allstores: (state) => state.stores,
+      allstores: 'stores',
     }),
-    // categorys() {
-    //   let recommen = [];
-
-    //       this.stores.forEach((store) => {
-    //       recommen.push(
-    //         store.shops.map((shop) => {
-    //           return {
-    //             storeID: store.id,
-    //             storeName: store.name,
-    //             storePhone: store.phone,
-    //             shopCategory: shop.category,
-    //             shopCount: shop.count,
-    //             shopImgs: shop.imgs,
-    //             shopImgUrel: shop.imgyrel,
-    //             shopName: shop.name,
-    //             shopNewPrice: shop.newshopprice,
-    //             shopOldPrice: shop.oldshopprice,
-    //             shopRemark: shop.remark,
-    //           };
-    //         })
-    //       );
-    //     });
-
-    //   // console.log(recommen.flat())
-    //   return recommen;
-    // },
     isLogin() {
       if (!this.userInfo) {
         if (this.myStore) {
