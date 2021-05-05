@@ -29,8 +29,8 @@
               Object.keys(this.shop).forEach( key => {
                   obj[key] = this.shop[key]
               })
-              obj.storeName = this.storeInfo.storeName 
-              obj.storeID = this.storeInfo.storeID
+              obj.storeName =  this.shop.storeName || this.storeInfo.storeName 
+              obj.storeID =  this.shop.storeID || this.storeInfo.storeID
               this.$store.commit('USERCHOOSE',obj)
               this.$router.push(address)
           }
@@ -54,7 +54,7 @@
     &:hover
         color red
 .showcard 
-    height 45%
+    height 100%
     width 24%
     display flex 
     flex-direction column

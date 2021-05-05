@@ -51,7 +51,7 @@ export default {
         async [ADDSHOP]({commit},data){
             const result = await addShop(data)
             if(!result.code){
-                window.alert('添加成功')
+                vue.$message.success('数据更新成功')
             }
         },
     },
@@ -68,13 +68,19 @@ export default {
             }
             state.myStore=store
         },
-        [UPDATASHOPS](state,shop){
-            // console.log(shop)
-            if(shop.imgs.length){
-                // console.log(1)
-                shop.imgurel = shop.imgs[0].imgPath
+        [UPDATASHOPS](state,{type,shop}){
+            if(type === 'add'){
+                if(shop.imgs.length){
+                    shop.imgurel = shop.imgs[0].imgPath
+                }
+                state.myStore.shops.push(shop)
+            }else if(type === 'update'){
+                state.myStore.shops.forEach( (element , index) => {
+                    if(element.id === shop.id){
+                        state.myStore.shops.splice(index,1,shop)
+                    }
+                })
             }
-            state.myStore.shops.push(shop)
         },
         [DELSHOPS](state,index){
             // console.log(index)

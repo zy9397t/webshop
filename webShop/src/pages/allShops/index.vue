@@ -2,13 +2,15 @@
   <div class="main">
     <div class="headcontainer">
       <div class="search">
-        <input type="text" v-model="keyWords" placeholder='请输入关键字'/>
+        <input type="text" v-model="keyWords" placeholder='请输入关键字' @keyup.enter="search"/>
         <div @click="search" class="cup button">搜索</div>
       </div>
     </div>
 	<div class="container">
     <div class="bodycontainer">
-		<Searchshops :shops = 'searchShops'></Searchshops>
+		<div class="searchshops">
+			<ShowCard v-for="(shop,index) in searchShops" :key="index" :shop='shop'></ShowCard>
+		</div>
 	</div>
 
 	</div>
@@ -17,37 +19,32 @@
 </template>
 
 <script>
-import Searchshops from "components/searchshops";
+import ShowCard from "components/ShowCard";
 import Footer from "components/Footer"
 import {mapState} from 'vuex'
 export default {
 	mounted(){
 		this.keyWords = this.$route.query.keyWords
+		this.searchShops = this.searchShopsFunction()
 	},
 	data(){
 		return {
-			keyWords:''
+			keyWords:'',
+			searchShops:[]
 		}
 	},
 	methods:{
-		search(){}
-	},
-	computed:{
-		...mapState({
-			stores : state => state.stores
-		}),
-		searchShops(){
+		search(){
+			this.searchShops = this.searchShopsFunction()
+		},
+		searchShopsFunction(){
 			let arr = []
-			// this.stores.forEach( store => {
-			// 	arr.push(store.shops.filter(shop => {shop.name.indexOf(this.keyWords)
-			// 	}))
-			// })
 
 			for(let storeInd in this.stores){
 				let store = this.stores[storeInd]
 				for(let shopInd in store.shops){
 					let shop = store.shops[shopInd]
-					if(shop.name.indexOf(this.keyWords)+1 ){
+					if(shop.name.indexOf(this.keyWords)+1 || shop.category.indexOf(this.keyWords) + 1){
 						
 						shop.storeID = store.id
 						shop.storeName = store.name 
@@ -60,9 +57,15 @@ export default {
 			return arr
 		}
 	},
+	computed:{
+		...mapState({
+			stores : state => state.stores
+		}),
+		
+	},
   components:{
     Footer,
-	Searchshops
+	ShowCard
   }
 };
 </script>
@@ -130,7 +133,10 @@ input {
 input:focus {
 	outline: none;
 }
-
+.searchshops{
+	display: flex;
+	flex-wrap: wrap;
+}
 
 
 

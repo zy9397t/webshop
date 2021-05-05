@@ -125,7 +125,7 @@ export default {
         //搜索商家用户
         searchUsers({ keyWords: this.keyWords, type: "stores" }).then(
           (result) => {
-            this.$message.success('操作成功')
+            // this.$message.success('操作成功')
             this.stores = result.data.stores;
           }
         );

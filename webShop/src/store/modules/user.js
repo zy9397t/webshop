@@ -1,5 +1,5 @@
-import {userLogin,userRegist,apply,getUserOrders} from 'api'
-import {USERLOGIN, USERREGIST,USERCHOOSE,UPDATASHOPCAR,DELSHOPCAR,APPLY,CLEARSHOPCAR,CREATEORDER,GETUSERORDERS, GETSTORES} from '../mutation_types'
+import {userLogin,userRegist,apply,getUserOrders,beVip} from 'api'
+import {USERLOGIN, USERREGIST,USERCHOOSE,UPDATASHOPCAR,DELSHOPCAR,APPLY,CLEARSHOPCAR,CREATEORDER,GETUSERORDERS, BEVIP} from '../mutation_types'
 
 
 import router from'@/router'
@@ -17,6 +17,15 @@ const state = {
     allPrice:0
 }
 const actions = {
+
+    async [BEVIP]({commit},userid){
+        const result = await beVip({id:userid})
+        if(!result.code){
+            vue.$message.success('恭喜你！成为尊贵的vip用户')
+            commit(BEVIP)
+        }
+    },
+
     async [USERREGIST]({commit},user){
         const result = await userRegist(user)
         if(!result.code){
@@ -74,6 +83,9 @@ const actions = {
     }
 }
 const mutations={
+    [BEVIP](state){
+        state.userInfo.userVip = true
+    },
     [USERLOGIN](state,user){
         state.userInfo = user
     },

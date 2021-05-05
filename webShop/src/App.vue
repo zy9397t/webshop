@@ -20,9 +20,7 @@ import Guider from 'components/Guider'
     },
     mounted(){
       window.onbeforeunload = ()=>{
-       
         window.sessionStorage.setItem('state',JSON.stringify(this.$store.state))
-        
       }
       
       window.onload = ()=>{

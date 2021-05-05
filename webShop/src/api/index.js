@@ -65,4 +65,8 @@ export function changUserStatus(data){
     return instance.post('/changUserStatus',data)
 }
 
+export function beVip(data){
+    return instance.post('/beVip',data)
+}
+
 

@@ -6,6 +6,17 @@ const jwt = require('jsonwebtoken')
 const e = require('express')
 module.exports = function(router) {
 
+    router.post('/beVip',(req,res) => {
+        const id = req.body.id 
+        userModel.updateOne({id},{$set:{vip:true}},(error,result) =>{
+            if(error){
+                res.send({code:1,error})
+            }else{
+                res.send({code:0,data:{}})
+            }
+        })
+    })
+
     router.post('/getUserOrders',(req,res)=>{
         const {userid} = req.body
         userModel.findOne({id:userid},(error,result) => {

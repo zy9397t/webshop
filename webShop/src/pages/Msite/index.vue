@@ -10,13 +10,13 @@
               <span class="login cup" @click="redirect('Login')">登录</span>
               <span class="regist cup" @click="redirect('Regist')">注册</span>
             </span>
-            <span v-else
-              >你好，{{ isLogin }}
+            <span v-else 
+              >你好， <span :class="{vipName:userInfo.userVip}">{{ isLogin }}</span>
               <span class="logout cup" @click="logout">退出登录</span>
             </span>
             <span class="cup">我的订单</span>
             <!-- <span class="cup" @click="getMyStore()">我的商店</span> -->
-            <span class="cup">我的会员</span>
+            <span class="cup" @click="beVip">成为会员</span>
           </div>
         </div></el-col>
 
@@ -188,6 +188,7 @@
         :key="index"
         :store="store"
         :storeInfo='{storeName:store.name,storeID:store.id}'
+        
       ></ShowShops>
     </div>
 
@@ -240,13 +241,19 @@ export default {
     };
   },
   methods: {
+    beVip(){
+      if(!this.userInfo.userid){
+        this.$message.error('您还没有登录哦！')
+      }else{
+        if(this.userInfo.userVip){
+          this.$message.error('您已经是会员了')
+        }else{
+          //成为会员
+          this.$store.dispatch('BEVIP',this.userInfo.userid)
+        }
+      }
+    },
     redirect(value) {
-      // console.log(value)
-      // switch (value){
-      //   case 'login' : this.$router.push('/login');break
-      //   case 'regist' : this.$router.push('/regist');break
-      //   default : break
-      // }
       this.$router.push(value);
     },
     getMyStore() {
@@ -312,6 +319,9 @@ export default {
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 .cup {
   cursor: pointer;
+}
+.vipName {
+  color:orange
 }
 
 .el-row {

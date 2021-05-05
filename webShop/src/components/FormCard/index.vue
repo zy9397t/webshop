@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <img src="./img/route.png" alt="" />
+    <div class="imgbox">
+      <img src="./img/route.png" alt="" />
+    </div>
     <div class="formCard">
       <h1>{{ config.title }}</h1>
       <div
@@ -51,16 +53,32 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-.container 
-    display flex
-    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 60%);
-    img 
-        width 300px
+@keyframes rotate {
+  0%{
+    // transform:rotate(0deg)
+  }
 
+  100%{
+    transform:rotate(360deg)
+  }
+}
 
+.container {
+  display: flex;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 60%);
+  .imgbox {
+    overflow: hidden;
+    background-color:#43acb6;
+  }
+
+  img {
+    width: 300px;
+    // transform: rotate(90deg);
+    animation rotate 30s linear infinite 
+  }
+}
 
 .formCard {
-  
   border-radius: 5px;
   width: 40vw;
   // border 1px solid black

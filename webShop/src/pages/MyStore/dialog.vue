@@ -99,7 +99,7 @@
 
 <!-- https://jsonplaceholder.typicode.com/posts/ -->
       </el-form>
-      <el-row>
+      <el-row v-if='!selectShop'>
         <el-upload
           class="upload-demo"
           action="http://localhost:4000/img"
@@ -142,7 +142,15 @@
 import { img2Base64 } from "utils";
 import { mapState } from "vuex";
 export default {
-
+  mounted(){
+    // console.log(this.selectShop)
+    if(this.selectShop){
+      this.editForm = this.selectShop
+    }
+  },
+  props:{
+    selectShop:Object
+  },
   data() {
     return {
       fileList: [],
@@ -169,9 +177,18 @@ export default {
     },
 
     btnOk() {
+      let shop = {}
+      let type = ''
       // console.log(this.fileList);
-      let shop = {
-        // id:this.myStore.id,
+      if(this.selectShop){
+        //商品修改
+        type = 'update'
+        shop = this.editForm
+      }else{
+        //商品添加
+        type = 'add'
+        shop = {
+        id:'shop'+Math.round(Math.random()*10000),
         name:this.editForm.name,
         oldshopprice:this.editForm.oldshopprice,
         newshopprice:this.editForm.newshopprice,
@@ -179,14 +196,10 @@ export default {
         count:this.editForm.count,
         category:this.editForm.category,
         imgs:this.fileList.map((img)=>{
-            
           return {imgPath:img.fileName}
         })
       }
-      // console.log(shop)
-      // this.$store.dispatch('ADDSHOP')
-      // if(!this.myStore.shop){}
-      // this.myStore.shops.push(shop)
+      }
       if(!shop.name || !shop.oldshopprice || !shop.newshopprice || !shop.category || !shop.count){
         this.$message.error('数据不能为空')
       }else{
@@ -194,7 +207,7 @@ export default {
         if(!rz.test(shop.newshopprice) || !rz.test(shop.oldshopprice) || !rz.test(shop.count)){
           this.$message.error('价格或数量只能为数字')
         }else{
-          this.$store.commit('UPDATASHOPS',shop)
+          this.$store.commit('UPDATASHOPS',{type,shop})
           // console.log(this.myStore.shops[0].imgurel)
           // console.log(this.myStore.shops[2].imgurel)
           this.closeDialog()

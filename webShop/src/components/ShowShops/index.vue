@@ -9,7 +9,7 @@
                           <!-- 广告 -->
                             <el-aside width="200px">{{adInfo}}</el-aside>
                             <el-main class="main">
-                                <ShowCard v-for="(shop,index) in store.shops" :key="index" :shop='shop' class="showCard" :storeInfo='storeInfo'></ShowCard>
+                                <ShowCard v-for="(shop,index) in store.shops" :key="index" :shop='shop' class="showCard" :storeInfo='storeInfo' v-show="index<3"></ShowCard>
                                 <!-- <div class="more" @click="showMore">查看更多>></div> -->
                                 <ShowCard :more="true" :storeInfo='storeInfo'></ShowCard>
                             </el-main>
@@ -33,7 +33,7 @@ import ShowCard from 'components/ShowCard'
       },
       data(){
         return{
-          adInfo:'侧边栏'
+          adInfo:''
         }
       },
       methods:{
@@ -99,6 +99,7 @@ import ShowCard from 'components/ShowCard'
     text-align: center;
     // line-height: 160px;
     padding 10px
+    overflow:hidden
   }
   
   body > .el-container {
@@ -115,8 +116,8 @@ import ShowCard from 'components/ShowCard'
   }
 
 
-  .mySet 
-    height 500px
+  // .mySet 
+  //   height 500px
 
   .main 
     background #d3dce6

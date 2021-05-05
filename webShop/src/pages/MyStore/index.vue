@@ -80,7 +80,7 @@
                 size="small"
                 v-if="scope.row.isSystemAdmin != 1"
                 type="text"
-                @click="edit(scope.$index)"
+                @click="edit(scope.row)"
                 >编辑</el-button
               >
               <el-divider
@@ -119,6 +119,16 @@
         :show-close="false"
         ><Dialog @close="closeDialogEdit" @val-change="EditChange"></Dialog>
       </el-dialog>
+
+      <el-dialog
+        :title="editTitle"
+        v-if="dialogedit2"
+        :visible="true"
+        :close-on-click-modal="false"
+        :show-close="false"
+        ><Dialog @close="closeDialogEdit" @val-change="EditChange" :selectShop='selectShop'></Dialog>
+      </el-dialog>
+
     </div>
   </div>
 </template>
@@ -145,6 +155,8 @@ export default {
     return {
       // tableData: [],
       dialogedit: false,
+      dialogedit2:false,
+      selectShop:{},
       editTitle: "",
       columnData: [
         { prop: "name", label: "商品名称" },
@@ -158,7 +170,12 @@ export default {
   },
 
   methods: {
-    
+    edit( shop ){
+      console.log(shop)
+      this.selectShop = shop
+      this.dialogedit2 = true
+      this.editTitle = '商品修改'
+    },
     logout(){
       this.$store.commit('LOGOUT')
      
@@ -170,15 +187,32 @@ export default {
     //关闭弹窗
     closeDialogEdit() {
       this.dialogedit = false;
+      this.dialogedit2 = false;
       setTimeout(() => {
         this.row_id = "";
       }, 500);
     },
+
     //发送新增和修改请求
     EditChange() {},
     del(value) {
-      console.log(this.myStore.shops)
-      this.$store.commit("DELSHOPS", value);
+      
+      this.$confirm('确定删除吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          this.$store.commit("DELSHOPS", value);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     },
     addShops() {
       // console.log(JsonFilter( JSON.stringify(this.myStore.shops)))
@@ -186,12 +220,7 @@ export default {
         shops:JSON.stringify(this.myStore.shops),
         id: this.myStore.id,
       };
-      // console.log(obj.shops);
-      if (this.myStore.shops.length) {
         this.$store.dispatch("ADDSHOP", obj);
-      } else {
-        this.$message.error("没有商品");
-      }
     },
   },
 };

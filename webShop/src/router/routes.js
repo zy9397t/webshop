@@ -1,6 +1,5 @@
 import Msite from 'pages/Msite'
 import Orders from 'pages/Orders'
-import Service from 'pages/Service'
 import ShopCar from 'pages/ShopCar'
 import MyStore from 'pages/MyStore'
 
@@ -35,10 +34,6 @@ export default [
     {
         path:'/Orders',
         component:Orders
-    },
-    {
-        path:'/Service',
-        component:Service
     },
     {
         path:'/ShopCar',
