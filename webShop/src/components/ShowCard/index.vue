@@ -8,7 +8,7 @@
             <div class="oldPrice"><strike>{{shop.oldshopprice}}元</strike></div>
       </div>  
   </div>
-  <div class="showcard more" v-else>查看更多-></div>
+  <div class="showcard more" @click="callback" v-else>查看更多-></div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -20,6 +20,10 @@
           more:{
               type:Boolean,
               default:false
+          },
+          callback:{
+              type:Function,
+              default:()=>{}
           },
           storeInfo:Object
       },
@@ -54,7 +58,7 @@
     &:hover
         color red
 .showcard 
-    height 100%
+    // height 100%
     width 24%
     display flex 
     flex-direction column
@@ -68,7 +72,7 @@
         transform translateY(-1px) scale(1.01)
     img
         width 80%
-        // height 
+        max-height 63%
     .shopName
         color black 
         font-size 10px

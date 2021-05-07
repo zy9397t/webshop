@@ -9,9 +9,9 @@
                           <!-- 广告 -->
                             <el-aside width="200px">{{adInfo}}</el-aside>
                             <el-main class="main">
-                                <ShowCard v-for="(shop,index) in store.shops" :key="index" :shop='shop' class="showCard" :storeInfo='storeInfo' v-show="index<3"></ShowCard>
+                                <ShowCard v-for="(shop,index) in store.shops" :key="index" :shop='shop' class="showCard" :storeInfo='storeInfo' v-show="showShop(index,store.shops.length)"></ShowCard>
                                 <!-- <div class="more" @click="showMore">查看更多>></div> -->
-                                <ShowCard :more="true" :storeInfo='storeInfo'></ShowCard>
+                                <ShowCard :more="true" :storeInfo='storeInfo' :callback="showMoreShops" v-if="indexMax < store.shops.length"></ShowCard>
                             </el-main>
                         </el-container>
                    </el-container>
@@ -33,13 +33,26 @@ import ShowCard from 'components/ShowCard'
       },
       data(){
         return{
-          adInfo:''
+          adInfo:'',
+          indexMax:3
         }
       },
       methods:{
-          showMore(){
-              // console.log("showMore")
-              this.$router.push('/AllShops')
+          // showMore(){
+          //     // console.log("showMore")
+          //     this.$router.push('/AllShops')
+          // },
+          showShop(index,maxLength){
+            return index < this.indexMax
+          },
+          showMoreShops(){
+            let maxLength = this.store.shops.length
+            if(this.indexMax + 4 > maxLength){
+              this.indexMax = maxLength
+            }else{
+              this.indexMax+=4
+            }
+            this.$router.push()
           }
       }
   }
@@ -124,7 +137,6 @@ import ShowCard from 'components/ShowCard'
     display flex 
     justify-content left
     flex-wrap wrap
-
 
 
  

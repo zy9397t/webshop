@@ -19,13 +19,9 @@ const storeModel = require('../model/storeModel')
 test(router)
 user(router)
 store(router)
-//商品分类
-router.get('/index_category',function(req,res){
-    const data = require('../data/index_category.json')
-    setTimeout(()=>{
-        res.send({code:0,data})
-    },1000)
-})
+
+
+//封禁/解封账号（修改账号状态）
 router.post('/changUserStatus',(req,res) => {
     const {id,status} = req.body 
     if((id.indexOf('user')+1)){
@@ -49,6 +45,7 @@ router.post('/changUserStatus',(req,res) => {
     }
 })
 
+//管理员登录
 router.post('/adminLogin',(req,res)=>{
     const {id,pwd} = req.body
     adminModel.findOne({id,pwd} , (error,result) => {
@@ -64,6 +61,7 @@ router.post('/adminLogin',(req,res)=>{
     })
 })
 
+//搜索两种用户（管理员）
 router.post('/searchUsers',(req,res)=>{
     const {keyWords,type} = req.body
     if(type === 'user'){
@@ -72,20 +70,25 @@ router.post('/searchUsers',(req,res)=>{
         searchStores(keyWords,storeModel,res)
     }
 })
+
+//保存图片
 router.post('/img',(req,res)=>{
     var form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
-        let filename = "public/" + files.file[0].originalFilename 
-        let rz = /(\.png|\.jpg)$/i
-        if(rz.test(filename)){
+        let oldfileName = files.file[0].originalFilename 
+
+        let date = new Date()
+        let newfileName = `img${date.valueOf()}.${oldfileName.split('.')[1]}`
+        let rg = /(\.png|\.jpg)$/i
+        if(rg.test(oldfileName)){
             images(files.file[0].path)
             //加载图像文件
             .size(1920)
-            .save(filename , { 
+            .save('public/'+newfileName , { 
                 quality: 80 //保存图片到文件,图片质量为50
             });
  
-            res.send({code:0,data:filename})
+            res.send({code:0,data:{oldfileName,newfileName}})
         }
         else {
             res.send({code:1,error:'文件格式错误'})
@@ -94,12 +97,7 @@ router.post('/img',(req,res)=>{
     });
 })
 //商家列表
-router.get('/shops',(req,res)=>{
-    const data = require('../data/shops.json')
-    setTimeout(()=>{
-        res.send({code:0,data})
-    },1000)
-})
+
 
 //一次性图形验证码
 router.get('/captcha',(req,res)=>{
@@ -114,14 +112,6 @@ router.get('/captcha',(req,res)=>{
     res.send(Svg.data)
 })
 
-router.get('/goods',(req,res)=>{
-    res.send({code:0,data:{goods}})
-})
-router.get('/info',(req,res)=>{
-    res.send({code:0,data:{info}})
-})
-router.get('/ratings',(req,res)=>{
-    res.send({code:0,data:{ratings}})
-})
+
 
 module.exports = router

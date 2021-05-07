@@ -137,11 +137,11 @@
             <div class="cd_icon">
               <!-- <div class="icon"></div> -->
               <i class="el-icon-time"></i>
-              <h1 class="time">{{ hour }}点场 倒计时</h1>
+              <h1 class="time">{{ hour % 2 === 0? hour+2 : hour +1 }}点场 倒计时</h1>
             </div>
             <div class="cd_time_now">
-              <span>{{ hour }}</span> : <span>{{ minute }}</span> :
-              <span>{{ second }}</span>
+              <span>{{ hour % 2 === 0 ? 1 : 0 }}</span> : <span>{{ 59 - minute }}</span> :
+              <span>{{ 60 - second }}</span>
             </div>
           </div></el-col
         >
@@ -291,6 +291,7 @@ export default {
     hour() {
       if (this.timeNow) {
         let hours = this.timeNow.getHours();
+        
         return hours < 10 ? "0" + hours : hours;
       } else {
         return 0;

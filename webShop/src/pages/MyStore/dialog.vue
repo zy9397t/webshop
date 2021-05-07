@@ -107,6 +107,7 @@
           :before-upload="beforeUpload"
           :auto-upload="true"
           :on-remove="removeImg"
+          :on-success="successImg"
           ref="upload"
         >
           <el-button slot="trigger" size="small" type="primary"
@@ -139,7 +140,7 @@
 </template>
 
 <script>
-import { img2Base64 } from "utils";
+// import { img2Base64 } from "utils";
 import { mapState } from "vuex";
 export default {
   mounted(){
@@ -196,7 +197,7 @@ export default {
         count:this.editForm.count,
         category:this.editForm.category,
         imgs:this.fileList.map((img)=>{
-          return {imgPath:img.fileName}
+          return {imgPath:img.newfileName}
         })
       }
       }
@@ -222,29 +223,40 @@ export default {
         }
       });
     },
-
-    async beforeUpload(file) {
-      let flag = true;
-      // let rz = new RegExp('/*[\.png|\.jpg|\.jpge]/')
+    successImg(response,file,fileList){
+      console.log(response,file,fileList)
+      this.fileList.push({
+        oldfileName:response.data.oldfileName,
+        newfileName:response.data.newfileName
+      })
+    },
+    beforeUpload(file) {
+      
       let re = /(\.png|\.jpg)$/i;
       if (!re.test(file.name)) {
         this.$message.error("仅支持png格式文件'");
-        this.$refs["upload"].abort(file);
-        return;
+        // this.$refs["upload"].abort(file);
+        return false;
       }
+      let flag = true;
       this.fileList.forEach((img) => {
-        if (file.name === img.fileName) {
+        if (file.name === img.oldfileName) {
           this.$message.error("已传入相同图片");
           flag = false;
-          this.$refs["upload"].abort(file);
+          return
         }
       });
-      if (flag) {
-        // let result = await img2Base64(file);
-        this.fileList.push({
-          fileName: file.name,
-          // base64URL: result,
-        });
+      
+      if (!flag) {
+        return false;
+        // // console.log(file.name.split('.')[1])
+        // let date = new Date()
+        // let fileName = `img${date.valueOf()}.${file.name.split('.')[1]}`
+        // // let result = await img2Base64(file);
+        // file.name = fileName
+        // this.fileList.push({
+        //   fileName:file.name
+        // });
       }
     },
   },

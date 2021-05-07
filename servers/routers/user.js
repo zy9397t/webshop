@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const e = require('express')
 module.exports = function(router) {
 
+    //普通用户成为vip
     router.post('/beVip',(req,res) => {
         const id = req.body.id 
         userModel.updateOne({id},{$set:{vip:true}},(error,result) =>{
@@ -17,6 +18,7 @@ module.exports = function(router) {
         })
     })
 
+    //获取当前用户的所有订单信息
     router.post('/getUserOrders',(req,res)=>{
         const {userid} = req.body
         userModel.findOne({id:userid},(error,result) => {
@@ -28,6 +30,7 @@ module.exports = function(router) {
         }) 
     })
 
+    //购物车结算
     router.post('/apply',(req,res)=>{
         const orderInfo = JSON.parse(req.body.order)
         // console.log(orderInfo)
@@ -50,7 +53,7 @@ module.exports = function(router) {
         })
     })
 
-
+    //用户登录
     router.post('/login_pwd',function(req,res){
         res.header('Access-Control-Allow-Credentials',true)
         // const {phone,pwd,captcha} = req.body
@@ -90,14 +93,8 @@ module.exports = function(router) {
             }
         })
     }),
-
-    router.post('/addOrder',(req,res)=>{
-        const {userId,storeID,order} = req.body
-        console.log(userId,storeID,order)
-            // userModel.updateOne({id:userId})
-        
-    })
     
+    //用户注册
     router.post('/registUser',(req,res)=>{
         const {name,phone,pwd,others,status} = req.body
         // console.log(name,phone,pwd,others)
@@ -133,31 +130,6 @@ module.exports = function(router) {
         })
     })
 
-    router.post('/autoLogin',(req,res) =>{
-        // console.log(req.headers['authorization'])
-        // console.log(req.body.token)
-        // console.log(jwt.decode(token,'zy123'))
-        
-        if(req.body.token){
-            const decode = jwt.decode(req.body.token,'zy123')
-            if(!decode || decode.exp < Date.now() / 1000) {
-                res.send({code:1,data:{errorMessage:'token过期,请重新登录'}})
-            }else{
-                userModel.findOne({_id:decode.id},(error,user)=>{
-                    if(error || !user){
-                        res.send({code:1,data:{errorMessage:'重新登录'}})
-                    }else{
-                        res.send({code:0,data:{
-                            user:{user_id:user.id,name:user.name,phone:user.phone},
-                        }})
-                    }
-                })
-            }
-        }else{
-            res.send({code:1,data:{errorMessage:'无token,请重新登录'}})
-        }
-        // res.send(1)
-    })
-
+  
    
 }

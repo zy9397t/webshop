@@ -8,6 +8,7 @@ const {
 const user = require('./user')
 module.exports = function (router) {
 
+    //订单发货（修改订单状态）
     router.post('/changeOrderStatus',(req,res) => {
         const { userId,storeId,orderId } = req.body
         // console.log(userId,storeId,orderId)
@@ -26,6 +27,7 @@ module.exports = function (router) {
         })
     })
 
+    //获取当前商店的所有订单
     router.post('/getStoreOrders',(req,res) => {
         const { storeid } = req.body
         // console.log(storeid)
@@ -39,6 +41,7 @@ module.exports = function (router) {
         })
     })
 
+    //获取所有店铺信息（首页）
     router.get('/getStores', (req, res) => {
         storeModel.find({}, (error, Stores) => {
             // console.log(error, Stores)
@@ -63,6 +66,7 @@ module.exports = function (router) {
        
     })
 
+    //当前店铺修改商品列表
     router.post('/addShop', (req, res) => {
         let {
             id,
@@ -90,6 +94,7 @@ module.exports = function (router) {
         })
     })
 
+    //商家用户登录
     router.post('/loginStore', (req, res) => {
         const phoneNum = req.body.phone
         const pwd = req.body.pwd
@@ -130,6 +135,7 @@ module.exports = function (router) {
         })
     })
 
+    //商家用户注册
     router.post('/registStore', (req, res) => {
         const storeName = req.body.name
         const phoneNum = req.body.phone
